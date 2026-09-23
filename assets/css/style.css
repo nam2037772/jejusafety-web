@@ -479,9 +479,11 @@ input[type="email"],select,textarea{
 .section--tight{padding:clamp(40px,5vw,64px) 0}
 .page-head .btn-row{margin-top:2em}
 
-.party-note{padding:1.3em 1.5em;border-left:2px solid var(--navy);background:var(--paper);
-  font-size:.92rem;line-height:1.85;color:var(--ink-2)}
-.party-note a{border-bottom:1px solid var(--line-2)}
+.party-note{padding:1.4em 1.6em;border-left:2px solid var(--navy);background:var(--paper)}
+/* 제목·본문 두 가지 색만 — 본문은 진한 회색 한 가지, 가는 300 굵기 대신 400 */
+.party-note__ttl{font-family:var(--serif);font-weight:500;font-size:clamp(1.05rem,1.8vw,1.2rem);line-height:1.5;color:var(--ink)}
+.party-note p{margin-top:.6em;font-size:.95rem;font-weight:400;line-height:1.8;color:var(--ink-2)}
+.party-note .nb{white-space:nowrap}   /* '(주)' 와 회사명이 줄에서 갈라지지 않게 */
 .mat-filter{margin-top:clamp(28px,4vw,44px)}
 .mat-filter .search-box{margin-bottom:1em}
 .chip[aria-pressed="true"]{border-color:var(--ink);color:var(--ink)}
