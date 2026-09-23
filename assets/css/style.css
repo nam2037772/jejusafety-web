@@ -1,0 +1,654 @@
+/* ============================================================
+   제주안전시설 — style.css
+   ------------------------------------------------------------
+   자매 브랜드 제주노출콘크리트와 같은 디자인 가족입니다.
+
+   상속: 세리프 국문 헤드라인(Noto Serif KR 400/500), 본문 300,
+         eyebrow(.32em 자간), 오프화이트 --paper, 헤어라인 구분선,
+         라운드 0 / 그림자 0, --sec 섹션 리듬, 다크 CONTACT.
+   차이: 히어로는 흰 배경 비대칭 편집형(좌 헤드라인 / 우 현장사진),
+         네이비는 액센트로만, 안전황색은 기능 표시로만,
+         사진은 16:10 다큐멘터리(현장) — 건축 3:4 가 아닙니다.
+   ============================================================ */
+
+:root{
+  --bg:#ffffff;
+  --paper:#f4f3f0;          /* 따뜻한 오프화이트 — 교차 섹션 */
+  --ink:#161616;
+  --ink-2:#3d3d3d;
+  --sub:#555552;            /* 라벨 / 보조 — 흰 배경 7.5:1 */
+  --line:#e5e2dd;           /* 헤어라인 */
+  --line-2:#d4d0c9;
+  --dark:#141311;
+  --dark-sub:#a7a29a;
+
+  /* 제주안전시설 고유 액센트 — 면적으로 쓰지 않습니다 */
+  --navy:#1e3a52;           /* 기업 네이비 — 선·강조에만 */
+  --safety:#e0a325;         /* 안전황색 — 실제 안전표시처럼 최소로만 */
+
+  --gap:clamp(24px,6vw,80px);
+  --sec:clamp(88px,12vw,176px);
+  --wrap:1240px;
+  --header-h:80px;
+  --serif:"Noto Serif KR",serif;
+  --sans:"Noto Sans KR",-apple-system,BlinkMacSystemFont,"Malgun Gothic","맑은 고딕",sans-serif;
+  --ease:cubic-bezier(.2,.7,.2,1);
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  font-family:var(--sans);
+  font-weight:300;
+  font-size:16px;
+  line-height:1.75;
+  letter-spacing:.01em;
+  color:var(--ink);
+  background:var(--bg);
+  word-break:keep-all;          /* 한글 단어 중간 줄바꿈 방지 */
+  overflow-wrap:break-word;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+img{display:block;max-width:100%;height:auto}
+a{color:inherit;text-decoration:none}
+ul,ol{list-style:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+table{border-collapse:collapse;width:100%}
+h1,h2,h3,h4{font-weight:400;color:var(--ink)}
+figure{margin:0}
+address{font-style:normal}
+::selection{background:var(--ink);color:#fff}
+:focus-visible{outline:2px solid var(--navy);outline-offset:3px}
+
+.wrap{max-width:var(--wrap);margin:0 auto;padding-left:var(--gap);padding-right:var(--gap)}
+
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;
+  overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.skip-link{position:fixed;top:12px;left:var(--gap);z-index:1000;padding:.65em 1em;
+  background:var(--dark);color:#fff;transform:translateY(-160%);transition:transform .2s}
+.skip-link:focus{transform:none}
+
+/* ── 공통 타이포 ─────────────────────────────────────────── */
+.eyebrow{
+  display:block;
+  font-size:.72rem;font-weight:400;letter-spacing:.32em;
+  text-transform:uppercase;color:var(--sub);
+}
+h1,.h1{font-family:var(--serif);font-weight:400;
+  font-size:clamp(1.9rem,4.2vw,3.05rem);line-height:1.42;letter-spacing:.01em}
+h2,.h2{font-family:var(--serif);font-weight:400;
+  font-size:clamp(1.7rem,3.4vw,2.7rem);line-height:1.4;letter-spacing:.005em}
+h3,.h3{font-family:var(--serif);font-weight:500;
+  font-size:clamp(1.15rem,2vw,1.5rem);line-height:1.5}
+h4{font-family:var(--serif);font-weight:500;font-size:1.05rem;line-height:1.55}
+.lead{font-size:clamp(1.02rem,1.6vw,1.24rem);font-weight:300;color:var(--ink);line-height:1.8}
+p{font-size:1rem;line-height:1.95;color:var(--ink-2)}
+strong,b{font-weight:500;color:var(--ink)}
+em{font-style:normal}
+
+.link-arrow,.card-more{
+  display:inline-flex;align-items:center;gap:.7em;
+  font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;
+  font-weight:400;color:var(--ink);
+  padding-bottom:.35em;border-bottom:1px solid var(--ink);
+  transition:gap .4s var(--ease),opacity .3s;
+}
+.link-arrow::after{content:"→"}
+.card-more{border-bottom-color:var(--line-2)}
+.link-arrow:hover,.card-more:hover{gap:1.2em;opacity:.6}
+
+/* 스크롤 등장 — JS 가 확인된 경우에만 숨깁니다.
+   .js 없이 opacity:0 으로 두면 스크립트가 막힌 환경(일부 검색 크롤러
+   포함)에서 본문이 영영 보이지 않습니다. 기본값은 '보임' 입니다. */
+.js .reveal{opacity:0;transform:translateY(30px);
+  transition:opacity 1s var(--ease),transform 1s var(--ease)}
+.js .reveal.in,.js .reveal.is-in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){
+  .js .reveal{opacity:1;transform:none;transition:none}
+  html{scroll-behavior:auto}
+}
+
+/* ── 헤더 ───────────────────────────────────────────────── */
+.site-header{
+  position:sticky;top:0;z-index:100;
+  height:var(--header-h);display:flex;align-items:center;
+  background:#fff;border-bottom:1px solid var(--line);
+}
+.header-inner{display:flex;align-items:center;justify-content:space-between;gap:20px;width:100%}
+.logo{display:flex;flex-direction:column;line-height:1.15;z-index:2}
+.logo-mark{font-family:var(--serif);font-weight:500;font-size:1.12rem;letter-spacing:.04em;color:var(--ink)}
+/* 브랜드 아래 한 줄은 한글입니다 — 영문용 넓은 자간을 쓰지 않습니다 */
+.logo-sub{font-size:.66rem;letter-spacing:.02em;color:var(--sub);margin-top:.3em;white-space:nowrap}
+
+.gnb ul{display:flex;align-items:center;gap:clamp(16px,1.8vw,28px)}
+.gnb a{position:relative;display:inline-block;padding:.3em 0;
+  font-size:.84rem;font-weight:400;letter-spacing:.04em;color:var(--ink-2);
+  white-space:nowrap;transition:color .3s}
+.gnb a::after{content:"";position:absolute;left:0;bottom:0;width:0;height:1px;
+  background:currentColor;transition:width .4s var(--ease)}
+.gnb a:hover{color:var(--ink)}
+.gnb a:hover::after{width:100%}
+.gnb a[aria-current="page"]{color:var(--ink)}
+.gnb a[aria-current="page"]::after{width:100%;background:var(--navy)}
+
+.header-tel{font-family:var(--serif);font-size:.95rem;letter-spacing:.02em;color:var(--ink);white-space:nowrap}
+/* 헤더 우측 — 운영회사 쇼핑몰(보조) + 전화 */
+.header-util{display:flex;align-items:center;gap:18px;white-space:nowrap}
+.header-shop{font-size:.76rem;letter-spacing:.02em;color:var(--sub);padding-bottom:.15em;
+  border-bottom:1px solid var(--line-2);transition:color .3s,border-color .3s}
+.header-shop:hover{color:var(--ink);border-color:var(--ink)}
+.gnb-shop{display:none}
+.nav-toggle{display:none;position:relative;width:34px;height:34px;z-index:2;
+  font-size:0;color:var(--ink)}
+.nav-toggle::before,.nav-toggle::after{content:"";position:absolute;left:6px;width:22px;height:1.5px;
+  background:currentColor;transition:transform .4s var(--ease),top .3s}
+.nav-toggle::before{top:13px}
+.nav-toggle::after{top:20px}
+.nav-toggle[aria-expanded="true"]{color:#fff;position:fixed;right:var(--gap);left:auto}
+.nav-toggle[aria-expanded="true"]::before{top:16px;transform:rotate(45deg)}
+.nav-toggle[aria-expanded="true"]::after{top:16px;transform:rotate(-45deg)}
+
+/* ── 빵부스러기 ──────────────────────────────────────────── */
+.breadcrumb{border-bottom:1px solid var(--line);background:#fff}
+.breadcrumb ol{display:flex;flex-wrap:wrap;gap:.6em;padding:16px 0;
+  font-size:.74rem;letter-spacing:.06em;color:var(--sub)}
+.breadcrumb li+li::before{content:"/";margin-right:.6em;color:var(--line-2)}
+.breadcrumb a:hover{color:var(--ink)}
+
+/* ── 홈 히어로 — 흰 배경 비대칭 편집형 ─────────────────────
+   자매 사이트의 전면 사진 히어로를 그대로 쓰지 않습니다.
+   좌: 큰 국문 헤드라인 / 우: 큰 실제 현장 사진.
+──────────────────────────────────────────────────────────── */
+.hero{padding:clamp(56px,8vw,104px) 0 clamp(64px,9vw,120px);background:var(--bg)}
+.hero__grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.02fr);
+  gap:clamp(36px,5vw,80px);align-items:center}
+.hero__title{font-family:var(--serif);font-weight:400;color:var(--ink);
+  font-size:clamp(1.95rem,4.4vw,3.2rem);line-height:1.48;letter-spacing:.01em}
+.hero__scope{margin-top:2em;font-size:.9rem;letter-spacing:.1em;color:var(--sub)}
+/* 안전황색은 여기 한 줄에만 — 실제 안전표시처럼 최소로 씁니다 */
+.hero__scope::before{content:"";display:block;width:34px;height:3px;
+  background:var(--safety);margin-bottom:1.5em}
+.hero__desc{margin-top:1.1em;font-size:clamp(.94rem,1.4vw,1.05rem);
+  font-weight:300;color:var(--ink-2);letter-spacing:.02em}
+.hero__actions{margin-top:2.8em;display:flex;gap:2.2em;flex-wrap:wrap;align-items:center}
+.hero__media{position:relative}
+.hero__media img{width:100%;aspect-ratio:16/10;object-fit:cover;background:var(--paper)}
+.hero__media figcaption{margin-top:1em;font-size:.74rem;letter-spacing:.04em;color:var(--sub)}
+
+/* ── 섹션 ───────────────────────────────────────────────── */
+.section{padding:var(--sec) 0}
+.section--surface{background:var(--paper)}
+.section--dark{background:var(--dark);color:#fff}
+.section--dark h1,.section--dark h2,.section--dark h3{color:#fff}
+.section--dark p{color:rgba(255,255,255,.72)}
+.section--dark .eyebrow{color:var(--dark-sub)}
+
+.section-head{margin-bottom:clamp(44px,6vw,80px);max-width:46em}
+.section-head .eyebrow{margin-bottom:1.5em}
+.section-head p{margin-top:1.5em;max-width:34em;font-size:.98rem;line-height:1.9}
+.section-head--row{display:flex;justify-content:space-between;align-items:flex-end;
+  gap:40px;flex-wrap:wrap;max-width:none}
+
+/* ── 홈 · 소개 진술 ──────────────────────────────────────── */
+.statement__grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,.65fr);
+  gap:clamp(40px,7vw,96px);align-items:center}
+.statement__text .eyebrow{margin-bottom:1.8em}
+.statement__text p{margin-top:2em;max-width:32em}
+.statement__more{margin-top:2.6em}
+/* 원본 사진이 16:9 입니다. 세로 3:4 로 넣으면 현장이 과하게 잘립니다. */
+.statement__media img{width:100%;aspect-ratio:4/3;object-fit:cover;background:var(--paper)}
+.statement__media figcaption{margin-top:1em;font-size:.76rem;letter-spacing:.04em;color:var(--sub)}
+
+/* ── 시공사례 — 편집형 기록. 카드 상자를 쓰지 않습니다 ────── */
+.works__grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(24px,3vw,44px)}
+.work{display:block}
+.work__media{overflow:hidden;background:#e9e6e1}
+.work__media img{width:100%;aspect-ratio:16/10;object-fit:cover;
+  transition:transform 1.1s var(--ease)}
+.work:hover .work__media img{transform:scale(1.04)}
+.work__meta{margin-top:1.2em;display:flex;flex-wrap:wrap;gap:.7em;
+  font-size:.7rem;letter-spacing:.12em;color:var(--sub)}
+.work__meta span+span::before{content:"·";margin-right:.7em;color:var(--line-2)}
+.work__ttl{margin-top:.7em;font-family:var(--serif);font-weight:400;
+  font-size:1.08rem;line-height:1.5;color:var(--ink)}
+.work__sum{margin-top:.6em;font-size:.88rem;line-height:1.8;color:var(--ink-2)}
+.works__more{margin-top:clamp(44px,6vw,72px)}
+
+/* ── 서비스 — 번호 + 괘선. 동일 라운드 카드 반복을 피합니다 ── */
+.svc-list{border-top:1px solid var(--line)}
+.svc-row{display:grid;grid-template-columns:auto minmax(0,1fr) auto;
+  gap:clamp(20px,3vw,48px);align-items:baseline;
+  padding:clamp(26px,3vw,40px) 0;border-bottom:1px solid var(--line);
+  transition:opacity .3s}
+.svc-row:hover{opacity:.62}
+.svc-row__no{font-family:var(--serif);font-size:.95rem;color:var(--sub);letter-spacing:.1em}
+.svc-row__ttl{font-family:var(--serif);font-weight:500;font-size:1.16rem;line-height:1.5;color:var(--ink)}
+.svc-row__text{margin-top:.7em;max-width:38em;font-size:.92rem;line-height:1.9;color:var(--ink-2)}
+.svc-row__items{margin-top:1em;display:flex;flex-wrap:wrap;
+  font-size:.78rem;letter-spacing:.04em;color:var(--sub)}
+.svc-row__items li+li{margin-left:.9em;padding-left:.9em;border-left:1px solid var(--line)}
+.svc-row__go{font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--ink);white-space:nowrap}
+.svc-row__go::after{content:" →"}
+
+/* ── 자재 납품 ──────────────────────────────────────────── */
+.supply__grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  gap:clamp(36px,6vw,88px);align-items:center}
+.supply__text .eyebrow{margin-bottom:1.5em}
+.supply__desc{margin-top:1.8em;max-width:32em;font-size:1rem;line-height:1.95}
+.supply__actions{margin-top:2.6em;display:flex;gap:2.2em;flex-wrap:wrap;align-items:center}
+.supply__media img{width:100%;aspect-ratio:4/3;object-fit:cover;background:var(--paper)}
+
+/* ── CONTACT — 다크. 자매 사이트와 같은 마감 ────────────── */
+.cta-band{padding:var(--sec) 0;background:var(--dark);color:#fff;text-align:center}
+.cta-band .eyebrow{color:var(--dark-sub)}
+.cta-band h2{color:#fff;font-weight:300;margin:1.3em 0 1em;
+  font-size:clamp(1.8rem,4vw,2.9rem);line-height:1.45}
+.cta-band p{color:rgba(255,255,255,.72);max-width:34em;margin:0 auto}
+.cta-band__tel{display:inline-block;margin-top:1.6em;
+  font-family:var(--serif);font-weight:300;letter-spacing:.02em;color:#fff;
+  font-size:clamp(1.9rem,4.6vw,3.1rem);transition:opacity .3s}
+.cta-band__tel:hover{opacity:.7}
+.cta-band__hours{margin-top:1em;font-size:.8rem;letter-spacing:.1em;color:var(--dark-sub)}
+.cta-band .btn-row{margin-top:2.8em;justify-content:center}
+
+/* ── 푸터 ───────────────────────────────────────────────── */
+.site-footer{background:#0e0d0c;color:#c8c4bd;padding:clamp(64px,8vw,110px) 0 40px}
+.site-footer .wrap>*+*{margin-top:2.6em}
+.footer-brand{font-family:var(--serif);font-weight:500;font-size:1.15rem;
+  color:#f3f1ec;letter-spacing:.04em;display:block}
+.footer-brand span{display:block;margin-top:.7em;font-family:var(--sans);
+  font-size:.8rem;font-weight:300;letter-spacing:.02em;color:#b6b2ab}
+.footer-nav{display:flex;flex-wrap:wrap;gap:.9em 1.8em}
+.footer-nav a{font-size:.84rem;color:#c8c4bd;transition:color .3s}
+.footer-nav a:hover{color:#fff}
+.footer-biz{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:.6em 2.4em;font-size:.8rem;line-height:1.8;color:#b6b2ab}
+.footer-biz div{display:grid;grid-template-columns:108px 1fr;gap:0 12px}
+.footer-biz dt{color:#8d8981}
+.footer-biz dd{color:#c8c4bd}
+.footer-biz a:hover{color:#fff}
+.footer-copy{padding-top:2.4em;border-top:1px solid rgba(255,255,255,.08);
+  font-size:.72rem;letter-spacing:.05em;color:#8d8981}
+
+/* ── 모바일 하단 CTA ────────────────────────────────────── */
+.mobile-cta{display:none;position:fixed;left:0;right:0;bottom:0;z-index:90;
+  grid-template-columns:1fr 1fr;border-top:1px solid var(--line);background:#fff}
+.mobile-cta a{padding:15px 10px;text-align:center;font-size:.86rem;letter-spacing:.04em}
+.mobile-cta a:first-child{color:var(--ink);border-right:1px solid var(--line)}
+.mobile-cta a:last-child{background:var(--dark);color:#fff}
+
+/* ── 버튼 — 라운드 0. 개수를 늘리지 않습니다 ─────────────── */
+.btn-row{display:flex;flex-wrap:wrap;gap:1.6em 2.2em;align-items:center}
+.btn{display:inline-flex;align-items:center;justify-content:center;
+  min-height:52px;padding:.95em 2em;border:1px solid var(--ink);border-radius:0;
+  background:var(--ink);color:#fff;
+  font-size:.82rem;font-weight:400;letter-spacing:.1em;
+  transition:background .3s,color .3s,border-color .3s}
+.btn:hover{background:var(--dark);border-color:var(--dark)}
+.btn-primary{background:var(--navy);border-color:var(--navy)}
+.btn-primary:hover{background:#152b3d;border-color:#152b3d}
+.btn-safety{background:var(--ink);border-color:var(--ink)}
+.btn-safety:hover{background:var(--navy);border-color:var(--navy)}
+/* ghost 는 상자가 아니라 밑줄 링크로 둡니다 — 버튼 남발을 줄입니다 */
+.btn-ghost{min-height:0;padding:0 0 .35em;background:none;border:0;
+  border-bottom:1px solid var(--ink);color:var(--ink);
+  font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;
+  transition:opacity .3s}
+.btn-ghost:hover{background:none;opacity:.6}
+.cta-band .btn{background:#fff;border-color:#fff;color:var(--ink)}
+.cta-band .btn:hover{background:transparent;color:#fff}
+.cta-band .btn-ghost{background:none;border:0;border-bottom:1px solid rgba(255,255,255,.5);color:#fff}
+.cta-band .btn-ghost:hover{border-color:#fff}
+
+/* ── 페이지 머리 ────────────────────────────────────────── */
+.page-head{padding:clamp(52px,7vw,92px) 0 clamp(40px,5vw,64px);border-bottom:1px solid var(--line)}
+.page-head .eyebrow{margin-bottom:1.5em}
+.page-head p{margin-top:1.5em;max-width:38em;font-size:1rem;line-height:1.9}
+
+/* ── 그리드 / 카드 — 상자를 지우고 괘선만 남깁니다 ────────── */
+.grid{display:grid;gap:clamp(24px,3vw,44px)}
+.grid--2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.grid--3{grid-template-columns:repeat(3,minmax(0,1fr))}
+
+.card{display:flex;flex-direction:column;background:none;
+  border:0;border-top:1px solid var(--line);border-radius:0;padding:1.9em 0 0}
+.card>figure{margin:0 0 1.3em;overflow:hidden;background:#e9e6e1}
+.card>figure img{width:100%;aspect-ratio:16/10;object-fit:cover;transition:transform 1.1s var(--ease)}
+.card-link:hover>figure img{transform:scale(1.04)}
+.card h3{margin-bottom:.55em;font-family:var(--serif);font-weight:500;font-size:1.08rem;line-height:1.5}
+.card p{font-size:.9rem;line-height:1.85;color:var(--ink-2)}
+.card .body{display:flex;flex-direction:column;flex:1}
+.card .card-more{margin-top:1.5em;align-self:flex-start}
+.card-tags{margin-top:1.2em;font-size:.76rem;letter-spacing:.04em;color:var(--sub)}
+.card-link{transition:opacity .3s}
+.card-link:hover{opacity:.72}
+
+/* 두 갈래 안내 (납품 견적 / 쇼핑몰 구매) — 괘선으로만 나눕니다 */
+.split{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:0;border-top:1px solid var(--line)}
+.split>a{display:block;padding:2em clamp(20px,2.4vw,36px) 2.2em;
+  border-bottom:1px solid var(--line);transition:background .3s}
+.split>a+a{border-left:1px solid var(--line)}
+.split>a:first-child{padding-left:0}
+.split>a:last-child{padding-right:0}
+.split>a:hover{background:var(--paper)}
+.split b{display:block;font-family:var(--serif);font-weight:500;
+  font-size:1.1rem;line-height:1.5;color:var(--ink);margin-bottom:.7em}
+.split b::after{content:" →";font-family:var(--sans);font-weight:300;color:var(--sub)}
+.split span{display:block;max-width:32em;font-size:.92rem;line-height:1.9;color:var(--ink-2)}
+
+/* 사례 카드 — 사진을 먼저, 상자 없이 */
+.case-card{border-top:0;padding-top:0}
+.case-card>figure{margin-bottom:1.2em}
+.case-card .noimg{display:grid;place-items:center;aspect-ratio:16/10;
+  background:var(--paper);color:var(--sub);font-size:.8rem;letter-spacing:.06em}
+.service-card{border-top:1px solid var(--line)}
+
+/* ── 배지 / 태그 / 칩 — 알약형을 쓰지 않습니다 ───────────── */
+.badges{display:flex;flex-wrap:wrap;gap:.6em;margin-bottom:1em}
+.badge{font-size:.68rem;letter-spacing:.12em;color:var(--sub);font-weight:400}
+.badge+.badge::before{content:"·";margin-right:.6em;color:var(--line-2)}
+.badge--region{color:var(--navy)}
+.badge--customer{color:var(--sub)}
+.badge--work{color:var(--ink-2)}
+/* 기록 유형(시공 / 교체·유지보수 / 납품) — 배지 줄 맨 앞에 옵니다.
+   같은 목록 안에서 성격이 다른 기록을 가르는 값이라 테두리로만 조금 세웁니다. */
+.badge--evidence{color:var(--navy);border:1px solid var(--line-2);
+  padding:.18em .6em;letter-spacing:.08em}
+.badge--evidence+.badge::before{content:none}
+
+.tag,.chip{display:inline-block;padding:.4em .9em;border:1px solid var(--line);
+  border-radius:0;background:#fff;
+  font-size:.72rem;letter-spacing:.08em;color:var(--sub)}
+.tag--before{border-color:var(--line-2);color:var(--sub)}
+.tag--process{border-color:var(--line-2);color:var(--ink-2)}
+.tag--after{border-color:var(--navy);color:var(--navy)}
+.chips{display:flex;flex-wrap:wrap;gap:.6em}
+.chip:hover{border-color:var(--ink);color:var(--ink)}
+
+/* ── 표 / 사양 ──────────────────────────────────────────── */
+.table-wrap{overflow-x:auto;border-top:1px solid var(--ink)}
+.table-wrap table{min-width:520px}
+th,td{padding:1.1em 1em;text-align:left;font-size:.9rem;line-height:1.75;
+  border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:500;color:var(--ink);font-size:.74rem;letter-spacing:.14em;text-transform:uppercase}
+td{color:var(--ink-2)}
+.spec-list{border-top:1px solid var(--line)}
+.spec-list div,.spec-list li{display:grid;grid-template-columns:minmax(120px,180px) 1fr;
+  gap:0 1.6em;padding:1.1em 0;border-bottom:1px solid var(--line);font-size:.92rem}
+.spec-list dt,.spec-list b{color:var(--sub);font-weight:400;font-size:.8rem;letter-spacing:.08em}
+.spec-list dd{color:var(--ink-2)}
+.facilities{border-top:1px solid var(--ink)}
+
+/* ── 절차 / 문제 목록 / FAQ — 모두 괘선 행 ───────────────── */
+/* li 안에 ::before · <b> · <span> 셋이 들어옵니다.
+   2열 그리드에 그대로 두면 <span> 이 좁은 번호 열로 흘러 세로로 깨집니다.
+   번호는 1열에 고정하고 제목·설명은 둘 다 2열에 둡니다. */
+.steps{border-top:1px solid var(--line);counter-reset:step}
+.steps li{counter-increment:step;display:grid;grid-template-columns:auto minmax(0,1fr);
+  column-gap:1.5em;row-gap:.5em;padding:1.8em 0;border-bottom:1px solid var(--line)}
+.steps li::before{content:counter(step,decimal-leading-zero);grid-column:1;grid-row:1;
+  font-family:var(--serif);font-size:.95rem;color:var(--sub);letter-spacing:.1em;padding-top:.15em}
+.steps b{grid-column:2;display:block;font-family:var(--serif);font-weight:500;font-size:1.08rem}
+.steps span{grid-column:2;font-size:.92rem;line-height:1.85;color:var(--ink-2)}
+
+.problem-list{border-top:1px solid var(--line)}
+.problem-list li{border-bottom:1px solid var(--line)}
+.problem-list a{display:flex;justify-content:space-between;align-items:baseline;gap:1.5em;
+  padding:1.5em 0;font-size:1rem;color:var(--ink);transition:opacity .3s}
+.problem-list a:hover{opacity:.6}
+.problem-list em{font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--sub);white-space:nowrap}
+
+/* FAQ 는 <details><summary> 로 생성됩니다 */
+.faq{border-top:1px solid var(--line)}
+.faq>div,.faq li,.faq details{padding:0;border-bottom:1px solid var(--line)}
+.faq summary{position:relative;display:block;list-style:none;cursor:pointer;
+  padding:1.6em 2.4em 1.6em 0;
+  font-family:var(--serif);font-weight:500;font-size:1.04rem;line-height:1.6;color:var(--ink);
+  transition:opacity .3s}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary:hover{opacity:.6}
+.faq summary::after{content:"+";position:absolute;right:.2em;top:50%;transform:translateY(-50%);
+  font-family:var(--sans);font-size:1.05rem;font-weight:300;color:var(--sub);transition:transform .3s}
+.faq details[open] summary::after{content:"−"}
+.faq details>p,.faq p,.faq dd{padding:0 2.4em 1.8em 0;font-size:.94rem;line-height:1.9;color:var(--ink-2)}
+.faq h3,.faq dt,.faq b{font-family:var(--serif);font-weight:500;font-size:1.05rem;
+  line-height:1.6;margin-bottom:.7em;color:var(--ink)}
+
+/* ── 갤러리 / 단계 사진 ─────────────────────────────────── */
+.gallery{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(14px,1.8vw,26px)}
+.gallery figure{background:#e9e6e1}
+.gallery img{width:100%;aspect-ratio:16/10;object-fit:cover}
+.gallery figcaption,.figure-note{margin-top:.8em;font-size:.76rem;line-height:1.7;
+  letter-spacing:.03em;color:var(--sub)}
+.phase{margin-bottom:clamp(36px,5vw,64px)}
+.phase>h3{margin-bottom:1.4em;display:flex;align-items:baseline;gap:1em;flex-wrap:wrap}
+
+/* ── 검색 / 필터 ────────────────────────────────────────── */
+.search-box{margin-bottom:clamp(28px,4vw,48px)}
+.search-box input,input[type="text"],input[type="search"],input[type="tel"],
+input[type="email"],select,textarea{
+  width:100%;padding:.9em 1em;border:1px solid var(--line-2);border-radius:0;
+  background:#fff;font:inherit;font-size:.95rem;color:var(--ink)}
+.search-box input:focus,input:focus,select:focus,textarea:focus{
+  outline:none;border-color:var(--ink)}
+.filter-group{margin-bottom:1.6em}
+.filters{display:flex;flex-wrap:wrap;gap:.6em}
+.result-count{margin:1.6em 0;font-size:.78rem;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--sub)}
+
+/* ── 본문 산문 / 주석 ───────────────────────────────────── */
+.prose{max-width:44em}
+.prose>*+*{margin-top:1.5em}
+.prose h2{margin-top:2.2em}
+.prose h3{margin-top:1.8em}
+.prose ul,.prose ol{padding-left:1.2em}
+.prose ul li{list-style:disc}
+.prose ol li{list-style:decimal}
+.prose li{margin-top:.6em;font-size:.98rem;line-height:1.9;color:var(--ink-2)}
+/* 사례·서비스·자료 페이지는 h2 / p / ol 을 .wrap 바로 아래에 그대로 둡니다
+   (.prose 를 쓰지 않습니다). 전역 margin 리셋 때문에 리듬과 목록 기호가
+   사라지므로 여기서 되살립니다. 클래스가 붙은 목록(.steps · .problem-list 등)은
+   자체 레이아웃이 있으므로 :not([class]) 로 제외합니다. */
+.section .wrap>h2,.section .wrap>h3{margin-top:2.4em}
+.section .wrap>h3{margin-top:2em}
+.section .wrap>*:first-child{margin-top:0}
+.section .wrap>p,.section .wrap>dl,.section .wrap>.table-wrap,
+.section .wrap>ul,.section .wrap>ol,.section .wrap>figure{margin-top:1.15em}
+.section .wrap>h2+p,.section .wrap>h3+p,
+.section .wrap>h2+ul,.section .wrap>h2+ol{margin-top:1em}
+.section .wrap>ul:not([class]){padding-left:1.25em}
+.section .wrap>ul:not([class])>li{list-style:disc}
+.section .wrap>ol:not([class]){padding-left:1.45em}
+.section .wrap>ol:not([class])>li{list-style:decimal}
+.section .wrap>ul:not([class])>li,.section .wrap>ol:not([class])>li{
+  margin-top:.45em;font-size:.98rem;line-height:1.9;color:var(--ink-2)}
+
+.note{padding:1.4em 1.6em;background:var(--paper);border-left:2px solid var(--line-2);
+  font-size:.92rem;line-height:1.85;color:var(--ink-2)}
+/* 안전 주의 — 실제 안전표시처럼 여기서만 황색을 씁니다 */
+.note--safety{border-left-color:var(--safety);background:#fdf8ec}
+
+/* ── 제주 토목자재 ─────────────────────────────────────────
+   같은 디자인 가족 안에서 '상품'을 보여 줍니다 — 라운드 0, 그림자 0,
+   사진은 흰 바탕 정사각(쇼핑몰 상품 이미지가 대부분 1:1 입니다).
+   전화·견적 두 동작을 카드마다 바로 둡니다 (모바일에서 한 번에 연결). */
+.section--tight{padding:clamp(40px,5vw,64px) 0}
+.page-head .btn-row{margin-top:2em}
+
+.party-note{padding:1.3em 1.5em;border-left:2px solid var(--navy);background:var(--paper);
+  font-size:.92rem;line-height:1.85;color:var(--ink-2)}
+.party-note a{border-bottom:1px solid var(--line-2)}
+.mat-filter{margin-top:clamp(28px,4vw,44px)}
+.mat-filter .search-box{margin-bottom:1em}
+.chip[aria-pressed="true"]{border-color:var(--ink);color:var(--ink)}
+.chip .n{margin-left:.5em;color:var(--sub)}
+.mat-sec[hidden],.mat-card[hidden]{display:none}
+
+.mat-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(20px,2.4vw,36px)}
+.mat-card{display:flex;flex-direction:column;border-top:1px solid var(--line);padding-top:1.1em}
+.mat-card__media{position:relative;display:block;background:#fff;overflow:hidden}
+.section--surface .mat-card__media{border:1px solid var(--line)}
+.mat-card__media img{width:100%;aspect-ratio:1/1;object-fit:contain;transition:transform 1.1s var(--ease)}
+.mat-card__media:hover img{transform:scale(1.04)}
+.mat-card__flag{position:absolute;left:0;top:0;padding:.35em .7em;background:var(--ink);color:#fff;
+  font-size:.66rem;letter-spacing:.08em}
+.mat-card__body{display:flex;flex-direction:column;flex:1;padding-top:1em}
+.mat-card__maker{font-size:.68rem;letter-spacing:.12em;color:var(--navy)}
+.mat-card__ttl{margin-top:.4em;font-family:var(--serif);font-weight:500;font-size:1rem;line-height:1.5}
+.mat-card__ttl a:hover{opacity:.65}
+.mat-card__spec{margin-top:.4em;font-size:.8rem;line-height:1.7;color:var(--sub)}
+.mat-card__cta{margin-top:auto;display:grid;grid-template-columns:1fr 1fr;
+  border-top:1px solid var(--line)}
+.mat-card__spec+.mat-card__cta{margin-top:auto}
+.mat-card__body>.mat-card__spec{margin-bottom:1em}
+.mat-card__cta a{padding:.8em .4em;text-align:center;font-size:.78rem;letter-spacing:.06em;color:var(--ink);
+  transition:background .3s,color .3s}
+.mat-card__cta a+a{background:var(--ink);color:#fff}
+.mat-card__cta a:hover{background:var(--paper)}
+.mat-card__cta a+a:hover{background:var(--navy)}
+
+/* 상품 상세 — 좌 사진 / 우 제조원·판매원 표 + 전화·견적 */
+.product{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);
+  gap:clamp(32px,5vw,72px);align-items:start}
+.product__media img{width:100%;aspect-ratio:1/1;object-fit:contain;background:#fff;border:1px solid var(--line)}
+.party{border-top:1px solid var(--ink)}
+.party div{display:grid;grid-template-columns:minmax(96px,128px) 1fr;gap:0 1.4em;
+  padding:1em 0;border-bottom:1px solid var(--line);font-size:.92rem;line-height:1.75}
+.party dt{color:var(--sub);font-size:.8rem;letter-spacing:.06em}
+.party dd{color:var(--ink)}
+.party a{border-bottom:1px solid var(--line-2)}
+.party a.ext{margin-left:.5em;font-size:.8rem;color:var(--sub)}
+.party .basis{display:block;margin-top:.35em;font-size:.76rem;line-height:1.6;color:var(--sub)}
+.product__cta{margin-top:1.8em;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.product__links{margin-top:1.4em;display:flex;flex-wrap:wrap;gap:.6em 1.6em;font-size:.82rem}
+.product__links a{color:var(--sub);border-bottom:1px solid var(--line-2)}
+a.ext::after{content:" ↗";font-size:.9em}
+.bullets{border-top:1px solid var(--line)}
+/* 규격표의 항목명은 한글·단위(m², kg)라 대문자 변환을 쓰지 않습니다 */
+.table-wrap--kv th{text-transform:none;letter-spacing:.04em;font-size:.84rem;width:30%}
+.section .wrap>.table-wrap--kv+h2{margin-top:2em}
+.bullets li{padding:1em 0 1em 1.2em;border-bottom:1px solid var(--line);position:relative;
+  font-size:.95rem;line-height:1.85;color:var(--ink-2)}
+.bullets li::before{content:"";position:absolute;left:0;top:1.85em;width:6px;height:1px;background:var(--ink)}
+.bullets a{border-bottom:1px solid var(--line-2)}
+.pick-list{border-top:1px solid var(--line)}
+.pick-list div{display:grid;grid-template-columns:minmax(140px,220px) 1fr;gap:0 1.6em;
+  padding:1.3em 0;border-bottom:1px solid var(--line)}
+.pick-list dt{font-family:var(--serif);font-weight:500;color:var(--ink)}
+.pick-list dd{font-size:.94rem;line-height:1.85;color:var(--ink-2)}
+
+/* 제조사 카탈로그 사진 — 크기가 제각각이라 틀만 맞추고 잘라내지 않습니다 */
+.cat-gallery{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(14px,1.8vw,24px)}
+.cat-gallery figure{display:flex;flex-direction:column}
+.cat-gallery a{display:block;background:#fff;border:1px solid var(--line)}
+.cat-gallery img{width:100%;aspect-ratio:4/3;object-fit:contain}
+.cat-gallery figcaption{margin-top:.7em;font-size:.78rem;line-height:1.65;color:var(--ink-2)}
+.cat-gallery .tag{padding:.15em .5em;margin-right:.3em;font-size:.66rem}
+
+/* 홈 — 운영회사 쇼핑몰 안내. 배너가 아니라 괘선 한 구획입니다 */
+.shop-note{border-top:1px solid var(--line)}
+.shop-note__grid{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,.6fr);gap:clamp(24px,4vw,64px);align-items:center}
+.shop-note__ttl{margin-top:.8em;font-size:clamp(1.25rem,2.2vw,1.6rem)}
+.shop-note p{margin-top:1em;max-width:40em;font-size:.94rem}
+.shop-note__actions{display:flex;flex-direction:column;align-items:flex-start;gap:1.4em}
+.btn-ghost-box{background:#fff;color:var(--ink);border-color:var(--ink)}
+.btn-ghost-box:hover{background:var(--ink);color:#fff}
+
+/* 홈 — 두 사업 / 토목자재 카테고리 타일 */
+.biz{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(28px,4vw,64px)}
+.biz__item{display:flex;flex-direction:column;transition:opacity .3s}
+.biz__item:hover{opacity:.8}
+.biz__item figure{overflow:hidden;background:#fff;border:1px solid var(--line)}
+.biz__item img{width:100%;aspect-ratio:16/10;object-fit:cover}
+.biz__no{margin-top:1.6em;font-family:var(--serif);font-size:.9rem;letter-spacing:.1em;color:var(--sub)}
+.biz__item h3{margin-top:.5em;font-family:var(--serif);font-weight:500;font-size:1.3rem;line-height:1.45}
+.biz__item p{margin-top:.8em;font-size:.94rem;line-height:1.9;color:var(--ink-2)}
+.biz__item .link-arrow{margin-top:1.4em;align-self:flex-start}
+.cat-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:clamp(14px,1.8vw,24px)}
+.cat-tile{display:flex;flex-direction:column;background:#fff;border:1px solid var(--line);
+  padding:14px 14px 18px;transition:border-color .3s}
+.cat-tile:hover{border-color:var(--ink)}
+.cat-tile__img img{width:100%;aspect-ratio:1/1;object-fit:contain}
+.cat-tile__name{margin-top:.9em;font-family:var(--serif);font-weight:500;font-size:.98rem;line-height:1.5}
+.cat-tile__n{margin-top:.3em;font-size:.72rem;letter-spacing:.08em;color:var(--sub)}
+.works__more .link-arrow+.link-arrow{margin-left:2em}
+.hero__actions .btn{min-height:48px}
+
+/* 메뉴 6개 + 전화번호 — 좁은 데스크톱에서 전화번호를 먼저 뺍니다 */
+@media (max-width:1180px) and (min-width:769px){
+  .header-tel{display:none}
+  .header-util{gap:0}
+  .gnb ul{gap:clamp(12px,1.6vw,22px)}
+  .gnb a{font-size:.86rem}
+}
+
+/* ── 반응형 ─────────────────────────────────────────────── */
+@media (max-width:1024px){
+  .mat-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .cat-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .works__grid,.grid--3,.gallery{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .hero__grid{gap:clamp(28px,4vw,48px)}
+  .statement__grid{grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr)}
+}
+
+@media (max-width:900px){
+  .hero__grid,.statement__grid,.supply__grid{grid-template-columns:minmax(0,1fr)}
+  .statement__media{max-width:420px}
+  .hero__media img{aspect-ratio:16/9}
+  .svc-row{grid-template-columns:auto minmax(0,1fr);row-gap:1.2em}
+  .svc-row__go{grid-column:2;justify-self:start}
+  .footer-biz{grid-template-columns:minmax(0,1fr)}
+}
+
+@media (max-width:768px){
+  :root{--header-h:64px}
+  body{padding-bottom:56px}          /* 모바일 하단 CTA 자리 */
+  .nav-toggle{display:block}
+  .header-tel{display:none}
+  .gnb{position:fixed;inset:0;z-index:1;
+    background:rgba(20,19,17,.97);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+    display:flex;align-items:center;justify-content:center;
+    opacity:0;visibility:hidden;transition:opacity .4s var(--ease),visibility .4s}
+  .gnb.is-open{opacity:1;visibility:visible}
+  /* 메뉴가 열린 동안 헤더는 어두운 오버레이 위에 놓입니다 */
+  .site-header.is-nav-open{background:transparent;border-bottom-color:transparent}
+  .site-header.is-nav-open .logo-mark{color:#fff}
+  .site-header.is-nav-open .logo-sub{color:#a7a29a}
+  .gnb ul{flex-direction:column;gap:1.6em;text-align:center}
+  .gnb a{font-size:1.05rem;color:#e8e5e0}
+  .gnb a::after{display:none}
+  .gnb a[aria-current="page"]{color:#fff}
+  .mobile-cta{display:grid}
+  .header-util{display:none}
+  .gnb-shop{display:list-item;margin-top:.6em;padding-top:1.4em;border-top:1px solid rgba(255,255,255,.18)}
+  .gnb .gnb-shop a{font-size:.92rem;color:#c8c4bd}
+  /* 메뉴 링크 밑줄(::after)을 모바일에서 끄므로, 새 창 표시(↗)는 여기서 다시 켭니다 */
+  .gnb .gnb-shop a::after{display:inline;content:" ↗";position:static;width:auto;height:auto;background:none}
+  .shop-note__grid{grid-template-columns:minmax(0,1fr)}
+  .works__grid,.grid--2,.grid--3{grid-template-columns:minmax(0,1fr)}
+  .split{grid-template-columns:minmax(0,1fr)}
+  .split>a{padding-left:0;padding-right:0}
+  .split>a+a{border-left:0}
+  .gallery{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .section-head--row{align-items:flex-start}
+  .spec-list div,.spec-list li{grid-template-columns:minmax(0,1fr);gap:.3em}
+  .btn{width:100%}
+  .btn-ghost{width:auto}
+  .mat-grid,.cat-grid,.cat-gallery{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .product,.biz{grid-template-columns:minmax(0,1fr)}
+  .product__media{max-width:420px}
+  .product__cta{grid-template-columns:minmax(0,1fr)}
+  .party div,.pick-list div{grid-template-columns:minmax(0,1fr);gap:.2em}
+  .table-wrap--kv table{min-width:0}
+  .works__more .link-arrow{display:inline-block;margin:0 1.6em .8em 0}
+  .works__more .link-arrow+.link-arrow{margin-left:0}
+}
+
+@media (max-width:480px){
+  .gallery{grid-template-columns:minmax(0,1fr)}
+  .hero__title{font-size:1.8rem}
+}
