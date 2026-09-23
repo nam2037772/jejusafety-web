@@ -218,11 +218,10 @@
     input.addEventListener('input', function () { state.q = input.value.trim(); render(); });
   }
 
-  /* ── 문의 링크 조립 ───────────────────────────────────────
-     입력을 모으는 곳(buildInquiry)과 보내는 곳(sendInquiry)을 나눠 둡니다.
-     ▶ 향후 '사진 첨부형 견적문의 폼'을 붙일 때 고칠 곳은
-       config.js 의 CONTACT_CHANNELS.externalForm 한 줄과
-       아래 sendInquiry() 한 함수뿐입니다.
+  /* ── 견적문의 ─────────────────────────────────────────────
+     buildInquiry()  입력 → 제목·본문 조립 (메일·복사·온라인 접수가 함께 씀)
+     postInquiry()   온라인 접수 (config.js CONTACT_CHANNELS.formEndpoint 가 있을 때)
+     mailtoHref()    메일 앱 방식 (온라인 접수가 없거나 실패했을 때)
   ─────────────────────────────────────────────────────────── */
   function buildInquiry(form) {
     var get = function (n) { var f = form.elements[n]; return f ? f.value.trim() : ''; };
@@ -248,37 +247,145 @@
     };
   }
 
-  function sendInquiry(inq) {
-    /* 외부 폼(사진 첨부형)이 준비되면 그쪽으로 보냅니다 */
-    if (CONTACT_CHANNELS.externalForm) {
-      window.open(CONTACT_CHANNELS.externalForm, '_blank', 'noopener');
-      return;
-    }
-    /* 자체 서버가 없으므로 메일 앱으로 넘깁니다 */
-    location.href = 'mailto:' + COMPANY.email +
-      '?subject=' + encodeURIComponent(inq.subject) +
-      '&body=' + encodeURIComponent(inq.body);
+  /* 메일 앱으로 보내기 — 온라인 접수가 없거나 실패했을 때의 대안 */
+  function mailtoHref(inq) {
+    return 'mailto:' + COMPANY.email + '?subject=' + encodeURIComponent(inq.subject) + '&body=' + encodeURIComponent(inq.body);
+  }
+
+  /* 온라인 접수 — config.js 의 CONTACT_CHANNELS.formEndpoint 로 전송합니다.
+     성공은 서비스가 "받았다"고 응답했을 때만 인정합니다 (HTTP 2xx + ok/success).
+     그 외(오류 응답·시간 초과·네트워크 오류)는 모두 실패로 처리하고 입력 내용을 그대로 둡니다. */
+  function postInquiry(inq, form) {
+    var ch = CONTACT_CHANNELS;
+    var get = function (n) { var f = form.elements[n]; return f ? f.value.trim() : ''; };
+    var payload = {
+      subject: inq.subject,
+      '문의 유형': (INQUIRY_TYPES[inq.type] || INQUIRY_TYPES.quote).label,
+      '기관/업체명': get('org'), '담당자': get('name'), '연락처': get('phone'),
+      '현장 위치': get('place'), '시설/자재': get('facility'), '수량': get('qty'), '내용': get('message'),
+      botcheck: get('botcheck')
+    };
+    if (ch.formProvider === 'web3forms') { payload.access_key = ch.formAccessKey; payload.from_name = '제주안전시설 견적문의'; }
+    if (ch.formProvider === 'formspree') { payload._subject = inq.subject; payload._gotcha = payload.botcheck; delete payload.botcheck; }
+    var ctrl = ('AbortController' in window) ? new AbortController() : null;
+    var timer = ctrl ? setTimeout(function () { ctrl.abort(); }, 15000) : null;
+    return fetch(ch.formEndpoint, {
+      method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+      body: JSON.stringify(payload), signal: ctrl ? ctrl.signal : undefined
+    }).then(function (res) {
+      return res.json().catch(function () { return {}; }).then(function (j) {
+        if (timer) clearTimeout(timer);
+        if (res.ok && (j.ok === true || j.success === true)) return true;
+        throw new Error('rejected ' + res.status);
+      });
+    }, function (err) { if (timer) clearTimeout(timer); throw err; });
+  }
+
+  /* ── 견적문의 폼 ─────────────────────────────────────────── */
+  var DRAFT_KEY = 'jejusafety-inquiry-draft';
+  var DRAFT_FIELDS = ['type', 'org', 'name', 'phone', 'place', 'facility', 'qty', 'message'];
+  function saveDraft(form) {
+    try {
+      var d = {};
+      DRAFT_FIELDS.forEach(function (n) { if (form.elements[n]) d[n] = form.elements[n].value; });
+      localStorage.setItem(DRAFT_KEY, JSON.stringify(d));
+    } catch (e) { /* 저장할 수 없는 환경 — 무시 */ }
+  }
+  function loadDraft(form) {
+    try {
+      var d = JSON.parse(localStorage.getItem(DRAFT_KEY) || 'null');
+      if (!d) return;
+      DRAFT_FIELDS.forEach(function (n) { if (form.elements[n] && d[n]) form.elements[n].value = d[n]; });
+    } catch (e) { /* 무시 */ }
+  }
+  function clearDraft() { try { localStorage.removeItem(DRAFT_KEY); } catch (e) { /* 무시 */ } }
+
+  function copyText(text) {
+    if (navigator.clipboard && window.isSecureContext) return navigator.clipboard.writeText(text);
+    return new Promise(function (ok, bad) {
+      var ta = document.createElement('textarea');
+      ta.value = text; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select();
+      try { if (document.execCommand('copy')) ok(); else bad(); } catch (e) { bad(e); } finally { document.body.removeChild(ta); }
+    });
+  }
+
+  function validate(form) {
+    var get = function (n) { var f = form.elements[n]; return f ? f.value.trim() : ''; };
+    var errs = [];
+    if (!get('name')) errs.push(['name', '담당자 이름을 입력해 주세요.']);
+    var phone = get('phone').replace(/[^\d]/g, '');
+    if (!phone) errs.push(['phone', '연락처를 입력해 주세요.']);
+    else if (phone.length < 9 || phone.length > 12) errs.push(['phone', '연락처를 확인해 주세요.']);
+    if (!get('facility') && !get('message')) errs.push(['message', '시설/자재 또는 내용 중 하나를 입력해 주세요.']);
+    if (form.elements.consent && !form.elements.consent.checked) errs.push(['consent', '개인정보 수집·이용에 동의해 주세요.']);
+    Array.prototype.forEach.call(form.querySelectorAll('[aria-invalid]'), function (el) { el.removeAttribute('aria-invalid'); });
+    errs.forEach(function (x) { if (form.elements[x[0]]) form.elements[x[0]].setAttribute('aria-invalid', 'true'); });
+    return errs;
   }
 
   function initContact() {
     var form = document.getElementById('inquiryForm');
     if (!form) return;
+    var status = document.getElementById('inquiryStatus');
+    var submitBtn = document.getElementById('inquirySubmit');
+    var online = form.getAttribute('data-mode') === 'online' && !!CONTACT_CHANNELS.formEndpoint;
+    var submitLabel = submitBtn.textContent;
 
-    /* products.html 등에서 넘어온 ?type=supply 를 미리 선택하고,
-       토목자재 상품 페이지에서 넘어온 ?item= (상품명)은 '시설 / 자재' 칸에 채웁니다 */
+    function show(kind, html) { status.hidden = false; status.className = 'inq-status inq-status--' + kind; status.innerHTML = html; }
+
+    /* 1) 이 기기에 남은 작성 중 내용을 되살리고  2) 상품 페이지에서 넘어온 값(유형·상품명)을 우선 적용 */
+    loadDraft(form);
     var params = new URLSearchParams(location.search);
     var t = params.get('type');
-    if (t && form.elements.type && form.elements.type.querySelector('option[value="' + t + '"]')) {
-      form.elements.type.value = t;
-    }
+    if (t && form.elements.type && form.elements.type.querySelector('option[value="' + t + '"]')) form.elements.type.value = t;
     var item = params.get('item');
-    if (item && form.elements.facility && !form.elements.facility.value) {
-      form.elements.facility.value = item.slice(0, 80);
-    }
+    if (item && form.elements.facility) form.elements.facility.value = item.slice(0, 80);
+
+    form.addEventListener('input', function () { saveDraft(form); });
+    form.addEventListener('change', function () { saveDraft(form); });
+
+    document.getElementById('inquiryCopy').addEventListener('click', function () {
+      copyText(buildInquiry(form).body).then(function () {
+        show('info', '문의 내용을 복사했습니다. 문자나 이메일(' + esc(COMPANY.email) + ')에 붙여 넣어 보내주세요.');
+      }, function () { show('error', '복사하지 못했습니다. 내용을 직접 선택해 복사해 주세요.'); });
+    });
 
     form.addEventListener('submit', function (e) {
       e.preventDefault();
-      sendInquiry(buildInquiry(form));
+      if (form.elements.botcheck && form.elements.botcheck.value) return;      // 스팸 봇
+      var errs = validate(form);
+      if (errs.length) {
+        show('error', '<strong>입력을 확인해 주세요.</strong><br>' + errs.map(function (x) { return esc(x[1]); }).join('<br>'));
+        var first = form.elements[errs[0][0]]; if (first) first.focus();
+        return;
+      }
+      var inq = buildInquiry(form);
+      if (!online) {                                                              // 메일 앱 방식
+        saveDraft(form);
+        show('info', '메일 앱을 여는 중입니다. 메일 앱이 열리지 않으면 <strong>내용 복사</strong> 후 전화(' + esc(COMPANY.tel) + ')·문자·이메일로 보내주세요. 작성한 내용은 이 기기에 남아 있습니다.');
+        location.href = mailtoHref(inq);
+        return;
+      }
+      submitBtn.disabled = true; submitBtn.textContent = '보내는 중…';
+      show('info', '문의를 보내고 있습니다…');
+      postInquiry(inq, form).then(function () {
+        clearDraft();
+        var keepType = form.elements.type.value;
+        form.reset(); form.elements.type.value = keepType;
+        show('success', '<strong>문의가 접수되었습니다.</strong> 담당자가 확인 후 연락드립니다. 급하시면 ' +
+          '<a href="' + COMPANY.telHref + '">' + esc(COMPANY.tel) + '</a> 로 전화 주세요.');
+      }, function () {
+        saveDraft(form);
+        show('error', '<strong>문의를 보내지 못했습니다.</strong> 입력하신 내용은 그대로 남아 있습니다.<br>' +
+          '<button type="button" class="btn btn-safety inq-retry">다시 보내기</button> ' +
+          '<a class="btn-ghost" href="' + esc(mailtoHref(inq)) + '">메일 앱으로 보내기</a> · ' +
+          '<a class="btn-ghost" href="' + COMPANY.telHref + '">전화 ' + esc(COMPANY.tel) + '</a>');
+        var retry = status.querySelector('.inq-retry');
+        if (retry) retry.addEventListener('click', function () {
+          if (form.requestSubmit) form.requestSubmit(); else form.dispatchEvent(new Event('submit', { cancelable: true }));
+        });
+      }).then(function () { submitBtn.disabled = false; submitBtn.textContent = submitLabel; });
     });
   }
 

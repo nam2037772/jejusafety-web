@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="only light">
 <title>견적문의 — 안전시설 시공·토목자재 | 제주안전시설</title>
 <meta name="description" content="제주 안전시설 시공 견적과 토목자재(블록·경계석·시멘트·몰탈) 견적을 받습니다. 대표전화 1660-4019. 시공은 현장 사진과 위치, 자재는 품목·규격·수량·납품지를 알려주시면 견적을 드립니다.">
 <meta name="robots" content="index, follow, max-image-preview:large">
@@ -226,13 +227,12 @@
   <div class="wrap">
     <div class="section-head">
       <h2>문의 내용 작성</h2>
-      <p>아래를 채우고 버튼을 누르면 메일 앱에 내용이 자동으로 채워집니다.
-         메일에 <strong>현장 사진을 첨부</strong>해 보내주시면 됩니다.</p>
+      <p>아래를 채우고 버튼을 누르면 메일 앱에 내용이 자동으로 채워집니다. 메일에 <strong>현장 사진을 첨부</strong>해 보내주시면 됩니다. 메일 앱이 없으면 <strong>내용 복사</strong> 후 전화·문자·이메일로 보내주세요.</p>
     </div>
 
-    <form id="inquiryForm" class="card" novalidate>
+    <form id="inquiryForm" class="card" novalidate data-mode="mail">
       <p>
-        <label for="f-type"><strong>문의 유형</strong></label><br>
+        <label for="f-type">문의 유형</label><br>
         <select id="f-type" name="type" class="search-box">
           <option value="site">현장 확인 요청</option>
           <option value="quote" selected>견적 문의 (시공)</option>
@@ -243,22 +243,26 @@
       </p>
       <div class="grid grid--2">
         <p><label for="f-org">기관/업체명</label><input class="search-box" id="f-org" name="org" type="text" autocomplete="organization"></p>
-        <p><label for="f-name">담당자</label><input class="search-box" id="f-name" name="name" type="text" autocomplete="name"></p>
-        <p><label for="f-phone">연락처</label><input class="search-box" id="f-phone" name="phone" type="tel" autocomplete="tel"></p>
+        <p><label for="f-name">담당자 <span class="req">(필수)</span></label><input class="search-box" id="f-name" name="name" type="text" autocomplete="name" required aria-required="true"></p>
+        <p><label for="f-phone">연락처 <span class="req">(필수)</span></label><input class="search-box" id="f-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" required aria-required="true" placeholder="휴대폰 또는 사무실 번호"></p>
         <p><label for="f-place">현장 위치 (제주도 내)</label><input class="search-box" id="f-place" name="place" type="text" placeholder="예: 제주시 ○○동 / 서귀포시 ○○읍"></p>
         <p><label for="f-facility">시설 / 자재</label><input class="search-box" id="f-facility" name="facility" type="text" placeholder="예: 시선유도봉 / 곱은달 투수블록 200×200×60"></p>
         <p><label for="f-qty">수량</label><input class="search-box" id="f-qty" name="qty" type="text" placeholder="예: 12개소 / 300m² / 2파렛트"></p>
       </div>
       <p>
         <label for="f-msg">내용</label>
-        <textarea class="search-box" id="f-msg" name="message" rows="5" placeholder="현재 상태와 필요한 작업을 적어 주세요."></textarea>
+        <textarea class="search-box" id="f-msg" name="message" rows="5" placeholder="현재 상태와 필요한 작업을 적어 주세요. (시설/자재 또는 내용 중 하나는 필수)"></textarea>
       </p>
+      <p class="hp" aria-hidden="true"><label for="f-hp">이 칸은 비워 두세요</label><input id="f-hp" name="botcheck" type="text" tabindex="-1" autocomplete="off"></p>
+      
+      <div class="inq-status" id="inquiryStatus" role="status" aria-live="polite" hidden></div>
       <div class="btn-row">
-        <button class="btn btn-safety" type="submit">메일로 문의 보내기</button>
-        <a class="btn btn-ghost" href="tel:16604019">전화가 편하시면</a>
+        <button class="btn btn-safety" type="submit" id="inquirySubmit">메일 앱으로 문의 보내기</button>
+        <button class="btn btn-ghost" type="button" id="inquiryCopy">내용 복사</button>
+        <a class="btn btn-ghost" href="tel:16604019">전화가 편하시면 1660-4019</a>
       </div>
       <p class="card-tags" style="margin-top:10px">
-        입력하신 내용은 이 사이트에 저장되지 않습니다. 메일 앱으로 그대로 전달됩니다.
+        입력하신 내용은 이 사이트로 전송되지 않습니다. 메일 앱으로 그대로 전달되며, 작성 중인 내용은 이 기기에만 임시 저장됩니다.
       </p>
     </form>
 

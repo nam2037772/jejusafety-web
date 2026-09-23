@@ -152,7 +152,17 @@ const CONTACT_CHANNELS = {
   /* ▶ 향후 '사진 첨부형 견적문의 폼' 자리.
        네이버폼·구글폼 주소를 넣으면 문의 CTA 가 그 폼으로 전환됩니다.
        (contact.js 의 sendInquiry() 한 함수만 분기합니다 — 아래 주석 참고) */
-  externalForm: ''
+  externalForm: '',
+
+  /* ▶ 견적문의 온라인 접수 (메일 앱 없이 전송)
+       formEndpoint 가 비어 있으면 기존처럼 메일 앱을 엽니다.
+       - Formspree : formEndpoint 'https://formspree.io/f/<폼ID>' , formProvider 'formspree'
+       - Web3Forms : formEndpoint 'https://api.web3forms.com/submit' , formProvider 'web3forms', formAccessKey '<액세스 키>'
+       폼 ID·액세스 키는 공개용 식별자입니다(비밀번호·API 비밀키가 아님). 비밀값은 이 파일에 넣지 않습니다.
+       값을 바꾼 뒤 node tools/build.js — 견적문의·개인정보처리방침 문구가 함께 바뀝니다. */
+  formEndpoint: '',
+  formProvider: '',
+  formAccessKey: ''
 };
 
 /* 문의 유형 — contact.html?type= 값. 제품 페이지의 '자재 납품 문의' 는 type=supply 로 들어옵니다. */

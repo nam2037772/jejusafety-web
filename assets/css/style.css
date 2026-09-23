@@ -14,9 +14,12 @@
 :root{
   --bg:#ffffff;
   --paper:#f4f3f0;          /* 따뜻한 오프화이트 — 교차 섹션 */
-  --ink:#161616;
-  --ink-2:#3d3d3d;
-  --sub:#555552;            /* 라벨 / 보조 — 흰 배경 7.5:1 */
+  /* 글자색 — 흰 배경 기준 (2026-09-23 가독성 기준)
+     제목 #1F2937 (14.7:1) · 본문 #374151 (10.3:1) · 보조 #4B5563 (7.6:1) — 모두 WCAG AA 4.5:1 이상 */
+  --ink:#1F2937;
+  --ink-2:#374151;
+  --sub:#4B5563;
+  --placeholder:#6B7280;    /* 입력칸 안내문 (4.8:1) — 입력값과 구분되도록 본문보다 한 단계 연하게 */
   --line:#e5e2dd;           /* 헤어라인 */
   --line-2:#d4d0c9;
   --dark:#141311;
@@ -33,13 +36,17 @@
   --serif:"Noto Serif KR",serif;
   --sans:"Noto Sans KR",-apple-system,BlinkMacSystemFont,"Malgun Gothic","맑은 고딕",sans-serif;
   --ease:cubic-bezier(.2,.7,.2,1);
+
+  /* 브라우저 강제 다크모드(삼성 인터넷·웹뷰·확장 프로그램 등)가 일부만 색을 바꿔
+     밝은 배경 위에 밝은 글자가 남는 일을 막습니다. 이 사이트는 밝은 테마 하나입니다. */
+  color-scheme:light;
 }
 
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
 body{
   font-family:var(--sans);
-  font-weight:300;
+  font-weight:400;              /* 300(가는 굵기)은 회색 글자와 겹쳐 흐리게 보여 400 으로 */
   font-size:16px;
   line-height:1.75;
   letter-spacing:.01em;
@@ -48,7 +55,6 @@ body{
   word-break:keep-all;          /* 한글 단어 중간 줄바꿈 방지 */
   overflow-wrap:break-word;
   overflow-x:hidden;
-  -webkit-font-smoothing:antialiased;
 }
 img{display:block;max-width:100%;height:auto}
 a{color:inherit;text-decoration:none}
@@ -82,7 +88,7 @@ h2,.h2{font-family:var(--serif);font-weight:400;
 h3,.h3{font-family:var(--serif);font-weight:500;
   font-size:clamp(1.15rem,2vw,1.5rem);line-height:1.5}
 h4{font-family:var(--serif);font-weight:500;font-size:1.05rem;line-height:1.55}
-.lead{font-size:clamp(1.02rem,1.6vw,1.24rem);font-weight:300;color:var(--ink);line-height:1.8}
+.lead{font-size:clamp(1.02rem,1.6vw,1.24rem);font-weight:400;color:var(--ink);line-height:1.8}
 p{font-size:1rem;line-height:1.95;color:var(--ink-2)}
 strong,b{font-weight:500;color:var(--ink)}
 em{font-style:normal}
@@ -170,7 +176,7 @@ em{font-style:normal}
 .hero__scope::before{content:"";display:block;width:34px;height:3px;
   background:var(--safety);margin-bottom:1.5em}
 .hero__desc{margin-top:1.1em;font-size:clamp(.94rem,1.4vw,1.05rem);
-  font-weight:300;color:var(--ink-2);letter-spacing:.02em}
+  font-weight:400;color:var(--ink-2);letter-spacing:.02em}
 .hero__actions{margin-top:2.8em;display:flex;gap:2.2em;flex-wrap:wrap;align-items:center}
 .hero__media{position:relative}
 .hero__media img{width:100%;aspect-ratio:16/10;object-fit:cover;background:var(--paper)}
@@ -259,7 +265,7 @@ em{font-style:normal}
 .footer-brand{font-family:var(--serif);font-weight:500;font-size:1.15rem;
   color:#f3f1ec;letter-spacing:.04em;display:block}
 .footer-brand span{display:block;margin-top:.7em;font-family:var(--sans);
-  font-size:.8rem;font-weight:300;letter-spacing:.02em;color:#b6b2ab}
+  font-size:.8rem;font-weight:400;letter-spacing:.02em;color:#b6b2ab}
 .footer-nav{display:flex;flex-wrap:wrap;gap:.9em 1.8em}
 .footer-nav a{font-size:.84rem;color:#c8c4bd;transition:color .3s}
 .footer-nav a:hover{color:#fff}
@@ -362,6 +368,8 @@ em{font-style:normal}
 .tag,.chip{display:inline-block;padding:.4em .9em;border:1px solid var(--line);
   border-radius:0;background:#fff;
   font-size:.72rem;letter-spacing:.08em;color:var(--sub)}
+/* 필터 칩은 누르는 버튼입니다 — 태그보다 크고 진하게 (본문색, 13.4px) */
+.chip{font-size:.84rem;letter-spacing:.02em;color:var(--ink-2);border-color:var(--line-2)}
 .tag--before{border-color:var(--line-2);color:var(--sub)}
 .tag--process{border-color:var(--line-2);color:var(--ink-2)}
 .tag--after{border-color:var(--navy);color:var(--navy)}
@@ -432,13 +440,30 @@ td{color:var(--ink-2)}
 .search-box input,input[type="text"],input[type="search"],input[type="tel"],
 input[type="email"],select,textarea{
   width:100%;padding:.9em 1em;border:1px solid var(--line-2);border-radius:0;
-  background:#fff;font:inherit;font-size:.95rem;color:var(--ink)}
+  background:#fff;font:inherit;font-size:.95rem;font-weight:400;color:var(--ink)}
+::placeholder{color:var(--placeholder);opacity:1}          /* Firefox 기본 opacity(.54) 제거 */
+select option{color:var(--ink);background:#fff}
+label{color:var(--ink);font-weight:500}
 .search-box input:focus,input:focus,select:focus,textarea:focus{
   outline:none;border-color:var(--ink)}
 .filter-group{margin-bottom:1.6em}
 .filters{display:flex;flex-wrap:wrap;gap:.6em}
-.result-count{margin:1.6em 0;font-size:.78rem;letter-spacing:.12em;
-  text-transform:uppercase;color:var(--sub)}
+.result-count{margin:1.6em 0;font-size:.88rem;letter-spacing:.02em;color:var(--ink-2)}
+
+/* ── 견적문의 폼 ─────────────────────────────────────────── */
+.req{font-size:.8em;font-weight:400;color:var(--sub)}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}   /* 스팸 봇 함정 칸 */
+[aria-invalid="true"]{border-color:#b42318 !important;outline:1px solid #b42318}
+.consent{margin-top:1.4em;padding:1.1em 1.3em;background:#fff;border:1px solid var(--line-2);font-size:.9rem;color:var(--ink-2)}
+.consent__ttl{font-weight:500;color:var(--ink)}
+.consent ul{margin-top:.5em;padding-left:1.1em}
+.consent li{list-style:disc;margin-top:.25em;line-height:1.7}
+.consent__check{display:flex;align-items:center;gap:.6em;margin-top:.9em;cursor:pointer}
+.consent__check input{width:18px;height:18px}
+.inq-status{margin:1.2em 0;padding:1em 1.2em;border-left:3px solid var(--navy);background:#fff;font-size:.95rem;line-height:1.8;color:var(--ink)}
+.inq-status--success{border-left-color:#067647;background:#ecfdf3}
+.inq-status--error{border-left-color:#b42318;background:#fef3f2}
+.inq-status .btn{min-height:44px;margin:.6em .6em 0 0}
 
 /* ── 본문 산문 / 주석 ───────────────────────────────────── */
 .prose{max-width:44em}
@@ -524,7 +549,6 @@ input[type="email"],select,textarea{
 .party dd{color:var(--ink)}
 .party a{border-bottom:1px solid var(--line-2)}
 .party a.ext{margin-left:.5em;font-size:.8rem;color:var(--sub)}
-.party .basis{display:block;margin-top:.35em;font-size:.76rem;line-height:1.6;color:var(--sub)}
 .product__cta{margin-top:1.8em;display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .product__links{margin-top:1.4em;display:flex;flex-wrap:wrap;gap:.6em 1.6em;font-size:.82rem}
 .product__links a{color:var(--sub);border-bottom:1px solid var(--line-2)}
