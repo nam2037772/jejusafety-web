@@ -160,8 +160,8 @@ const CONTACT_CHANNELS = {
        - Web3Forms : formEndpoint 'https://api.web3forms.com/submit' , formProvider 'web3forms', formAccessKey '<액세스 키>'
        폼 ID·액세스 키는 공개용 식별자입니다(비밀번호·API 비밀키가 아님). 비밀값은 이 파일에 넣지 않습니다.
        값을 바꾼 뒤 node tools/build.js — 견적문의·개인정보처리방침 문구가 함께 바뀝니다. */
-  formEndpoint: '',
-  formProvider: '',
+  formEndpoint: 'https://formspree.io/f/mrpbkgev',   /* Formspree '제주안전시설 견적문의' → ainsafe@naver.com (2026-09-23 연결). 비우면 메일 앱 방식 */
+  formProvider: 'formspree',
   formAccessKey: ''
 };
 

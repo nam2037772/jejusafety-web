@@ -227,10 +227,10 @@
   <div class="wrap">
     <div class="section-head">
       <h2>문의 내용 작성</h2>
-      <p>아래를 채우고 버튼을 누르면 메일 앱에 내용이 자동으로 채워집니다. 메일에 <strong>현장 사진을 첨부</strong>해 보내주시면 됩니다. 메일 앱이 없으면 <strong>내용 복사</strong> 후 전화·문자·이메일로 보내주세요.</p>
+      <p>아래를 채우고 <strong>문의 보내기</strong>를 누르면 담당자에게 바로 전달됩니다. 현장 사진은 접수 후 문자 또는 이메일(ainsafe@naver.com)로 보내주세요.</p>
     </div>
 
-    <form id="inquiryForm" class="card" novalidate data-mode="mail">
+    <form id="inquiryForm" class="card" novalidate data-mode="online">
       <p>
         <label for="f-type">문의 유형</label><br>
         <select id="f-type" name="type" class="search-box">
@@ -246,23 +246,35 @@
         <p><label for="f-name">담당자 <span class="req">(필수)</span></label><input class="search-box" id="f-name" name="name" type="text" autocomplete="name" required aria-required="true"></p>
         <p><label for="f-phone">연락처 <span class="req">(필수)</span></label><input class="search-box" id="f-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" required aria-required="true" placeholder="휴대폰 또는 사무실 번호"></p>
         <p><label for="f-place">현장 위치 (제주도 내)</label><input class="search-box" id="f-place" name="place" type="text" placeholder="예: 제주시 ○○동 / 서귀포시 ○○읍"></p>
-        <p><label for="f-facility">시설 / 자재</label><input class="search-box" id="f-facility" name="facility" type="text" placeholder="예: 시선유도봉 / 곱은달 투수블록 200×200×60"></p>
+        <p><label for="f-facility">시설 / 자재</label><input class="search-box" id="f-facility" name="facility" type="text" placeholder="예: 시선유도봉 / 투수블록"></p>
         <p><label for="f-qty">수량</label><input class="search-box" id="f-qty" name="qty" type="text" placeholder="예: 12개소 / 300m² / 2파렛트"></p>
       </div>
       <p>
         <label for="f-msg">내용</label>
         <textarea class="search-box" id="f-msg" name="message" rows="5" placeholder="현재 상태와 필요한 작업을 적어 주세요. (시설/자재 또는 내용 중 하나는 필수)"></textarea>
       </p>
+      <p class="photo-note">📎 <strong>현장 사진·도면</strong> — 문의를 보낸 뒤 화면에 나오는 <strong>접수번호</strong>와 함께 ainsafe@naver.com 또는 문자로 보내주세요. (이 양식은 파일 첨부를 받지 않습니다)</p>
       <p class="hp" aria-hidden="true"><label for="f-hp">이 칸은 비워 두세요</label><input id="f-hp" name="botcheck" type="text" tabindex="-1" autocomplete="off"></p>
       
+      <div class="consent">
+        <p class="consent__ttl">개인정보 수집·이용 안내</p>
+        <ul>
+          <li>수집 항목: 담당자, 연락처 (필수) · 기관/업체명, 현장 위치, 시설/자재, 수량, 내용 (선택)</li>
+          <li>이용 목적: 견적·상담 회신과 현장 확인</li>
+          <li>보유 기간: 상담 종료 후 파기 (계약 시 관계 법령에 따른 기간 보관)</li>
+          <li>전송 처리: 문의 접수 서비스(Formspree)를 거쳐 ainsafe@naver.com 으로 전달됩니다</li>
+          <li>국외 이전: Formspree, Inc. (미국) — 위 항목을 문의 전달 목적으로 전송 시점에 이전하며, 서비스 보관 기간(무료 요금제 30일) 후 삭제됩니다</li>
+        </ul>
+        <label class="consent__check"><input type="checkbox" name="consent" id="f-consent" required aria-required="true"> 위 내용에 동의합니다 <span class="req">(필수)</span></label>
+      </div>
       <div class="inq-status" id="inquiryStatus" role="status" aria-live="polite" hidden></div>
       <div class="btn-row">
-        <button class="btn btn-safety" type="submit" id="inquirySubmit">메일 앱으로 문의 보내기</button>
+        <button class="btn btn-safety" type="submit" id="inquirySubmit">문의 보내기</button>
         <button class="btn btn-ghost" type="button" id="inquiryCopy">내용 복사</button>
         <a class="btn btn-ghost" href="tel:16604019">전화가 편하시면 1660-4019</a>
       </div>
       <p class="card-tags" style="margin-top:10px">
-        입력하신 내용은 이 사이트로 전송되지 않습니다. 메일 앱으로 그대로 전달되며, 작성 중인 내용은 이 기기에만 임시 저장됩니다.
+        작성 중인 내용은 이 기기에만 임시 저장되며, 전송이 완료되면 지워집니다.
       </p>
     </form>
 

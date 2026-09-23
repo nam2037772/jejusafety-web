@@ -454,6 +454,7 @@ label{color:var(--ink);font-weight:500}
 .req{font-size:.8em;font-weight:400;color:var(--sub)}
 .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}   /* 스팸 봇 함정 칸 */
 [aria-invalid="true"]{border-color:#b42318 !important;outline:1px solid #b42318}
+.photo-note{margin-top:1em;padding:.9em 1.1em;background:#fff;border:1px dashed var(--line-2);font-size:.92rem;line-height:1.75;color:var(--ink-2)}
 .consent{margin-top:1.4em;padding:1.1em 1.3em;background:#fff;border:1px solid var(--line-2);font-size:.9rem;color:var(--ink-2)}
 .consent__ttl{font-weight:500;color:var(--ink)}
 .consent ul{margin-top:.5em;padding-left:1.1em}

@@ -223,14 +223,23 @@
      postInquiry()   온라인 접수 (config.js CONTACT_CHANNELS.formEndpoint 가 있을 때)
      mailtoHref()    메일 앱 방식 (온라인 접수가 없거나 실패했을 때)
   ─────────────────────────────────────────────────────────── */
-  function buildInquiry(form) {
+  /* 접수번호 — 사진·도면을 따로 보낼 때 문의와 맞춰 보기 위한 번호 (JS-연월일-시분-임의 3자리) */
+  function makeRef() {
+    var d = new Date(), p = function (n) { return String(n).padStart(2, '0'); };
+    var r = Math.random().toString(36).slice(2, 5).toUpperCase();
+    return 'JS-' + String(d.getFullYear()).slice(2) + p(d.getMonth() + 1) + p(d.getDate()) + '-' + p(d.getHours()) + p(d.getMinutes()) + '-' + r;
+  }
+
+  function buildInquiry(form, ref) {
     var get = function (n) { var f = form.elements[n]; return f ? f.value.trim() : ''; };
     var type = get('type') || 'quote';
     var meta = INQUIRY_TYPES[type] || INQUIRY_TYPES.quote;
     return {
       type: type,
-      subject: meta.subject,
+      ref: ref || '',
+      subject: meta.subject + (ref ? ' (' + ref + ')' : ''),
       body: [
+        (ref ? '접수번호: ' + ref : ''),
         '문의 유형: ' + meta.label,
         '기관/업체명: ' + get('org'),
         '담당자: ' + get('name'),
@@ -260,6 +269,7 @@
     var get = function (n) { var f = form.elements[n]; return f ? f.value.trim() : ''; };
     var payload = {
       subject: inq.subject,
+      '접수번호': inq.ref,
       '문의 유형': (INQUIRY_TYPES[inq.type] || INQUIRY_TYPES.quote).label,
       '기관/업체명': get('org'), '담당자': get('name'), '연락처': get('phone'),
       '현장 위치': get('place'), '시설/자재': get('facility'), '수량': get('qty'), '내용': get('message'),
@@ -360,7 +370,7 @@
         var first = form.elements[errs[0][0]]; if (first) first.focus();
         return;
       }
-      var inq = buildInquiry(form);
+      var inq = buildInquiry(form, makeRef());
       if (!online) {                                                              // 메일 앱 방식
         saveDraft(form);
         show('info', '메일 앱을 여는 중입니다. 메일 앱이 열리지 않으면 <strong>내용 복사</strong> 후 전화(' + esc(COMPANY.tel) + ')·문자·이메일로 보내주세요. 작성한 내용은 이 기기에 남아 있습니다.');
@@ -373,8 +383,9 @@
         clearDraft();
         var keepType = form.elements.type.value;
         form.reset(); form.elements.type.value = keepType;
-        show('success', '<strong>문의가 접수되었습니다.</strong> 담당자가 확인 후 연락드립니다. 급하시면 ' +
-          '<a href="' + COMPANY.telHref + '">' + esc(COMPANY.tel) + '</a> 로 전화 주세요.');
+        show('success', '<strong>문의가 접수되었습니다.</strong> 접수번호 <strong>' + esc(inq.ref) + '</strong><br>' +
+          '현장 사진·도면이 있으면 접수번호와 함께 <a href="mailto:' + esc(COMPANY.email) + '?subject=' + encodeURIComponent('[사진·도면] ' + inq.ref) + '">' + esc(COMPANY.email) + '</a> 로 보내주세요. ' +
+          '담당자가 확인 후 연락드립니다. 급하시면 <a href="' + COMPANY.telHref + '">' + esc(COMPANY.tel) + '</a>');
       }, function () {
         saveDraft(form);
         show('error', '<strong>문의를 보내지 못했습니다.</strong> 입력하신 내용은 그대로 남아 있습니다.<br>' +
