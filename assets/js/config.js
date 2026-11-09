@@ -104,6 +104,16 @@ const COMPANY = {
   /* 쇼핑몰 자체 canonical 이 https://ainsafety.com/ 입니다 (www 아님) */
   storeUrl: 'https://ainsafety.com/',
 
+  /* 같은 사업자의 다른 채널 — JSON-LD 의 운영법인 sameAs 에만 씁니다 (화면에는 나오지 않습니다).
+     검색엔진·AI 답변 엔진이 이 사이트와 아래 채널들을 한 회사로 묶게 하려는 것입니다.
+     ainconcrete.com 에서도 이 사이트(jejusafety.kr)를 같은 방식으로 연결해 두었습니다.
+     ※ 이 값들은 EXTERNAL_LINKS 에 넣지 않습니다 — 넣으면 헤더·푸터에 링크가 새로 생깁니다. */
+  sameAsChannels: [
+    'https://ainconcrete.com/',
+    'https://www.youtube.com/@%EC%95%84%EC%9D%B8%EC%82%B0%EC%97%85%EC%95%88%EC%A0%84',
+    'https://www.instagram.com/ericswallart/'
+  ],
+
   /* ── 검색엔진 소유확인 ────────────────────────────────────
      각 검색엔진 콘솔이 발급한 content 값만 넣습니다.
      빈 값이면 <head> 에 아무것도 나가지 않습니다 — 추측한 값을 넣지 않습니다.
