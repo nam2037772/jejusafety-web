@@ -883,3 +883,7 @@ a.ext::after{content:" ↗";font-size:.9em}
 /* 서비스 카드의 시설 목록 — 본문과 간격을 두고 행마다 괘선 */
 .facilities{margin-top:1.2rem;border-top:1px solid var(--line)}
 .facilities li{padding:.55rem 0;border-bottom:1px solid var(--line);font-size:.9rem;color:var(--ink-2)}
+
+/* 회사소개 본문 링크 — 글자와 구분되도록 밑줄(구리색) */
+.about-prose p a,.about-prose li a{font-weight:500;color:var(--navy-deep);border-bottom:1px solid var(--copper)}
+.about-prose p a:hover{opacity:.65}
