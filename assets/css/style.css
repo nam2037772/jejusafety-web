@@ -887,3 +887,28 @@ a.ext::after{content:" ↗";font-size:.9em}
 /* 회사소개 본문 링크 — 글자와 구분되도록 밑줄(구리색) */
 .about-prose p a,.about-prose li a{font-weight:500;color:var(--navy-deep);border-bottom:1px solid var(--copper)}
 .about-prose p a:hover{opacity:.65}
+
+/* 안전용품 제품 분야 — 쇼핑몰 상위 카테고리 7개 */
+.btn-sm{padding:.7em 1.3em;font-size:.86rem}
+.shopcat{list-style:none;margin:0;padding:0;border-top:1px solid var(--ink)}
+.shopcat__row{display:grid;grid-template-columns:2.4rem minmax(0,11rem) minmax(0,1fr) auto;align-items:baseline;gap:.4rem clamp(12px,2.4vw,36px);padding:1.5rem 0;border-bottom:1px solid var(--line)}
+.shopcat__no{font-size:.78rem;font-weight:500;color:var(--copper)}
+.shopcat__name{margin:0;font-family:var(--serif);font-weight:500;font-size:1.18rem;line-height:1.4;color:var(--ink)}
+.shopcat__items{margin:0;font-size:.88rem;line-height:1.8;color:var(--sub)}
+.shopcat__link{justify-self:end;white-space:nowrap;font-size:.86rem;font-weight:500;color:var(--navy-deep);border-bottom:1px solid var(--copper);padding-bottom:2px}
+.shopcat__link::after{content:" ↗";color:var(--copper)}
+.shopcat__link:hover,.shopcat__link:focus-visible{opacity:.65}
+@media (max-width:760px){
+  .shopcat__row{grid-template-columns:2rem minmax(0,1fr)}
+  .shopcat__items,.shopcat__link{grid-column:2}
+  .shopcat__link{justify-self:start;margin-top:.3rem}
+}
+
+/* 홈 안전용품 — 쇼핑몰 상위 카테고리 7개 (이름만) */
+.gear-cats{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid var(--ink)}
+.gear-cats li{border-bottom:1px solid var(--line)}
+.gear-cats a{display:flex;align-items:baseline;gap:.7rem;padding:1.05rem .2rem;font-size:1.02rem;font-weight:500;color:var(--ink)}
+.gear-cats a:hover,.gear-cats a:focus-visible{color:var(--navy);opacity:.75}
+.gear-cats__no{font-size:.76rem;font-weight:500;color:var(--copper)}
+.gear-note a{color:var(--navy-deep);border-bottom:1px solid var(--copper)}
+@media (max-width:900px){.gear-cats{grid-template-columns:repeat(2,minmax(0,1fr))}}
