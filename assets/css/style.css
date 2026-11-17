@@ -13,7 +13,7 @@
 
 :root{
   --bg:#ffffff;
-  --paper:#f4f3f0;          /* 따뜻한 오프화이트 — 교차 섹션 */
+  --paper:#f5f3ee;          /* 따뜻한 오프화이트 — 교차 섹션 */
   /* 글자색 — 흰 배경 기준 (2026-09-23 가독성 기준)
      제목 #1F2937 (14.7:1) · 본문 #374151 (10.3:1) · 보조 #4B5563 (7.6:1) — 모두 WCAG AA 4.5:1 이상 */
   --ink:#1F2937;
@@ -24,17 +24,24 @@
   --line-2:#d4d0c9;
   --dark:#141311;
   --dark-sub:#a7a29a;
+  --navy-deep:#0a2140;      /* 어두운 면(CTA·푸터·다크 섹션) — 로고 네이비와 같은 색상각의 짙은 단계 */
+  --concrete:#e7e5e0;       /* 보조 면 — 제품·사진 바탕 */
+  --copper:#8a5a38;         /* 제한적 강조 — 번호·eyebrow·현재 위치 (흰 바탕 5.8:1) */
+  --copper-lt:#c29470;      /* 어두운 면 위 구리색 */
+  /* 공식 심벌 로고에서 추출한 색 — 참고용. UI 전체를 이 색으로 칠하지 않습니다 */
+  --brand-green:#7cc474;--brand-blue:#448cc8;--brand-teal:#1cb8b4;
 
   /* 제주안전시설 고유 액센트 — 면적으로 쓰지 않습니다 */
-  --navy:#1e3a52;           /* 기업 네이비 — 선·강조에만 */
+  --navy:#003470;           /* 기업 네이비 — 공식 로고 워드마크 색(#003470) */
   --safety:#e0a325;         /* 안전황색 — 실제 안전표시처럼 최소로만 */
 
   --gap:clamp(24px,6vw,80px);
   --sec:clamp(88px,12vw,176px);
   --wrap:1240px;
   --header-h:80px;
-  --serif:"Noto Serif KR",serif;
-  --sans:"Noto Sans KR",-apple-system,BlinkMacSystemFont,"Malgun Gothic","맑은 고딕",sans-serif;
+  --display:"IBM Plex Sans KR","Noto Sans KR",-apple-system,BlinkMacSystemFont,"Malgun Gothic","맑은 고딕",sans-serif;
+  --serif:var(--display);      /* 옛 이름 호환 — 제목도 같은 산세리프 한 가족 */
+  --sans:"IBM Plex Sans KR","Noto Sans KR",-apple-system,BlinkMacSystemFont,"Malgun Gothic","맑은 고딕",sans-serif;
   --ease:cubic-bezier(.2,.7,.2,1);
 
   /* 브라우저 강제 다크모드(삼성 인터넷·웹뷰·확장 프로그램 등)가 일부만 색을 바꿔
@@ -48,8 +55,8 @@ body{
   font-family:var(--sans);
   font-weight:400;              /* 300(가는 굵기)은 회색 글자와 겹쳐 흐리게 보여 400 으로 */
   font-size:16px;
-  line-height:1.75;
-  letter-spacing:.01em;
+  line-height:1.8;
+  letter-spacing:0;
   color:var(--ink);
   background:var(--bg);
   word-break:keep-all;          /* 한글 단어 중간 줄바꿈 방지 */
@@ -81,15 +88,15 @@ address{font-style:normal}
   font-size:.72rem;font-weight:400;letter-spacing:.32em;
   text-transform:uppercase;color:var(--sub);
 }
-h1,.h1{font-family:var(--serif);font-weight:400;
-  font-size:clamp(1.9rem,4.2vw,3.05rem);line-height:1.42;letter-spacing:.01em}
-h2,.h2{font-family:var(--serif);font-weight:400;
-  font-size:clamp(1.7rem,3.4vw,2.7rem);line-height:1.4;letter-spacing:.005em}
+h1,.h1{font-family:var(--serif);font-weight:500;
+  font-size:clamp(1.9rem,4.2vw,3.05rem);line-height:1.3;letter-spacing:-.025em}
+h2,.h2{font-family:var(--serif);font-weight:500;
+  font-size:clamp(1.7rem,3.4vw,2.6rem);line-height:1.32;letter-spacing:-.02em}
 h3,.h3{font-family:var(--serif);font-weight:500;
-  font-size:clamp(1.15rem,2vw,1.5rem);line-height:1.5}
+  font-size:clamp(1.15rem,2vw,1.5rem);line-height:1.45;letter-spacing:-.01em}
 h4{font-family:var(--serif);font-weight:500;font-size:1.05rem;line-height:1.55}
 .lead{font-size:clamp(1.02rem,1.6vw,1.24rem);font-weight:400;color:var(--ink);line-height:1.8}
-p{font-size:1rem;line-height:1.95;color:var(--ink-2)}
+p{font-size:1rem;line-height:1.85;color:var(--ink-2)}
 strong,b{font-weight:500;color:var(--ink)}
 em{font-style:normal}
 
@@ -141,9 +148,15 @@ em{font-style:normal}
 .header-tel{font-family:var(--serif);font-size:.95rem;letter-spacing:.02em;color:var(--ink);white-space:nowrap}
 /* 헤더 우측 — 운영회사 쇼핑몰(보조) + 전화 */
 .header-util{display:flex;align-items:center;gap:18px;white-space:nowrap}
-.header-shop{font-size:.76rem;letter-spacing:.02em;color:var(--sub);padding-bottom:.15em;
+.header-shop{font-size:.8rem;letter-spacing:.02em;color:var(--sub);padding-bottom:.15em;
   border-bottom:1px solid var(--line-2);transition:color .3s,border-color .3s}
 .header-shop:hover{color:var(--ink);border-color:var(--ink)}
+/* 헤더 우측 '온라인쇼핑몰' 버튼 — 메뉴 링크와 구분되는 외곽선 버튼 */
+.header-shop.btn-shop{display:inline-flex;align-items:center;padding:.5em 1.05em;
+  border:1px solid var(--navy);color:var(--navy);font-weight:500;letter-spacing:.02em;
+  transition:background .3s,color .3s}
+.header-shop.btn-shop:hover{background:var(--navy);color:#fff;border-color:var(--navy)}
+.header-shop.btn-shop::after{content:" ↗";margin-left:.25em}
 .gnb-shop{display:none}
 .nav-toggle{display:none;position:relative;width:34px;height:34px;z-index:2;
   font-size:0;color:var(--ink)}
@@ -161,26 +174,6 @@ em{font-style:normal}
   font-size:.74rem;letter-spacing:.06em;color:var(--sub)}
 .breadcrumb li+li::before{content:"/";margin-right:.6em;color:var(--line-2)}
 .breadcrumb a:hover{color:var(--ink)}
-
-/* ── 홈 히어로 — 흰 배경 비대칭 편집형 ─────────────────────
-   자매 사이트의 전면 사진 히어로를 그대로 쓰지 않습니다.
-   좌: 큰 국문 헤드라인 / 우: 큰 실제 현장 사진.
-──────────────────────────────────────────────────────────── */
-.hero{padding:clamp(56px,8vw,104px) 0 clamp(64px,9vw,120px);background:var(--bg)}
-.hero__grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.02fr);
-  gap:clamp(36px,5vw,80px);align-items:center}
-.hero__title{font-family:var(--serif);font-weight:400;color:var(--ink);
-  font-size:clamp(1.95rem,4.4vw,3.2rem);line-height:1.48;letter-spacing:.01em}
-.hero__scope{margin-top:2em;font-size:.9rem;letter-spacing:.1em;color:var(--sub)}
-/* 안전황색은 여기 한 줄에만 — 실제 안전표시처럼 최소로 씁니다 */
-.hero__scope::before{content:"";display:block;width:34px;height:3px;
-  background:var(--safety);margin-bottom:1.5em}
-.hero__desc{margin-top:1.1em;font-size:clamp(.94rem,1.4vw,1.05rem);
-  font-weight:400;color:var(--ink-2);letter-spacing:.02em}
-.hero__actions{margin-top:2.8em;display:flex;gap:2.2em;flex-wrap:wrap;align-items:center}
-.hero__media{position:relative}
-.hero__media img{width:100%;aspect-ratio:16/10;object-fit:cover;background:var(--paper)}
-.hero__media figcaption{margin-top:1em;font-size:.74rem;letter-spacing:.04em;color:var(--sub)}
 
 /* ── 섹션 ───────────────────────────────────────────────── */
 .section{padding:var(--sec) 0}
@@ -585,16 +578,6 @@ a.ext::after{content:" ↗";font-size:.9em}
 .btn-ghost-box{background:#fff;color:var(--ink);border-color:var(--ink)}
 .btn-ghost-box:hover{background:var(--ink);color:#fff}
 
-/* 홈 — 두 사업 / 토목자재 카테고리 타일 */
-.biz{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(28px,4vw,64px)}
-.biz__item{display:flex;flex-direction:column;transition:opacity .3s}
-.biz__item:hover{opacity:.8}
-.biz__item figure{overflow:hidden;background:#fff;border:1px solid var(--line)}
-.biz__item img{width:100%;aspect-ratio:16/10;object-fit:cover}
-.biz__no{margin-top:1.6em;font-family:var(--serif);font-size:.9rem;letter-spacing:.1em;color:var(--sub)}
-.biz__item h3{margin-top:.5em;font-family:var(--serif);font-weight:500;font-size:1.3rem;line-height:1.45}
-.biz__item p{margin-top:.8em;font-size:.94rem;line-height:1.9;color:var(--ink-2)}
-.biz__item .link-arrow{margin-top:1.4em;align-self:flex-start}
 .cat-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:clamp(14px,1.8vw,24px)}
 .cat-tile{display:flex;flex-direction:column;background:#fff;border:1px solid var(--line);
   padding:14px 14px 18px;transition:border-color .3s}
@@ -608,6 +591,7 @@ a.ext::after{content:" ↗";font-size:.9em}
 /* 메뉴 6개 + 전화번호 — 좁은 데스크톱에서 전화번호를 먼저 뺍니다 */
 @media (max-width:1180px) and (min-width:769px){
   .header-tel{display:none}
+  .header-shop.btn-shop{padding:.45em .8em;font-size:.78rem}
   .header-util{gap:0}
   .gnb ul{gap:clamp(12px,1.6vw,22px)}
   .gnb a{font-size:.86rem}
@@ -618,14 +602,12 @@ a.ext::after{content:" ↗";font-size:.9em}
   .mat-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
   .cat-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
   .works__grid,.grid--3,.gallery{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .hero__grid{gap:clamp(28px,4vw,48px)}
   .statement__grid{grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr)}
 }
 
 @media (max-width:900px){
-  .hero__grid,.statement__grid,.supply__grid{grid-template-columns:minmax(0,1fr)}
+  .statement__grid,.supply__grid{grid-template-columns:minmax(0,1fr)}
   .statement__media{max-width:420px}
-  .hero__media img{aspect-ratio:16/9}
   .svc-row{grid-template-columns:auto minmax(0,1fr);row-gap:1.2em}
   .svc-row__go{grid-column:2;justify-self:start}
   .footer-biz{grid-template-columns:minmax(0,1fr)}
@@ -666,7 +648,7 @@ a.ext::after{content:" ↗";font-size:.9em}
   .btn{width:100%}
   .btn-ghost{width:auto}
   .mat-grid,.cat-grid,.cat-gallery{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .product,.biz{grid-template-columns:minmax(0,1fr)}
+  .product{grid-template-columns:minmax(0,1fr)}
   .product__media{max-width:420px}
   .product__cta{grid-template-columns:minmax(0,1fr)}
   .party div,.pick-list div{grid-template-columns:minmax(0,1fr);gap:.2em}
@@ -677,5 +659,227 @@ a.ext::after{content:" ↗";font-size:.9em}
 
 @media (max-width:480px){
   .gallery{grid-template-columns:minmax(0,1fr)}
-  .hero__title{font-size:1.8rem}
 }
+
+/* 안전용품 페이지 — 견적 안내 목록 · 제품 분야 품목 */
+.need-list{border-top:1px solid var(--line)}
+.need-list li{position:relative;padding:.9em 0 .9em 1.4em;border-bottom:1px solid var(--line);font-size:.96rem;line-height:1.7;color:var(--ink-2)}
+.need-list li::before{content:"";position:absolute;left:.1em;top:1.5em;width:.5em;height:.5em;background:var(--safety)}
+
+/* ============================================================
+   DESIGN SYSTEM v2 — Premium Industrial Editorial
+   ------------------------------------------------------------
+   원칙: 절제 · 정밀 · 현장 중심.
+   - 색   : Deep Navy(기업) / Warm Off-white(배경) / Concrete(보조 면) / Muted Copper(제한적 강조)
+            안전황색은 '주의' 표시(.note--safety)에만 남깁니다.
+   - 글자 : IBM Plex Sans KR 한 가족 (300·400·500·600).
+            제목 500 · 자간 -.02em · 줄간격 1.3 / 본문 400 · 1.8 · 줄 길이 ≤ 38em
+   - 형태 : 라운드 0 · 그림자 0 · 장식 아이콘 0 · 구분은 괘선과 여백으로
+   - 사진 : 실제 제주 현장 사진만. 원본이 가로 900~966px 이므로 전체폭 확대 대신
+            '비대칭 분할 + 폭 상한'으로 씁니다 (확대로 인한 흐림 방지).
+   ============================================================ */
+
+/* ── 공식 심벌 로고 — 비율·색 변경 없이 그대로 (assets/images/brand/ain-symbol.png) ── */
+.logo{flex-direction:row;align-items:center;gap:.8rem}
+.logo-symbol{display:block;width:38px;height:38px;flex:none}
+.logo-text{display:flex;flex-direction:column;line-height:1.15}
+.footer-brand{display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:1rem;align-items:center}
+.footer-symbol{grid-row:1 / span 2;width:44px;height:44px}
+.footer-brand span{grid-column:2;margin-top:.3rem}
+/* 카드 안 품목 칩 (안전용품 페이지) */
+.biz__items{display:flex;flex-wrap:wrap;gap:.4em .5em;margin-top:1em}
+.biz__items li{font-size:.76rem;line-height:1.4;color:var(--sub);border:1px solid var(--line-2);padding:.25em .65em}
+.card .biz__items{margin-top:auto;padding-top:1em}
+
+/* ── 헤더 — 가는 괘선, 구리색 현재 위치 ───────────────────── */
+.site-header{background:rgba(255,255,255,.96);border-bottom:1px solid var(--line)}
+.logo-mark{font-weight:600;font-size:1.12rem;letter-spacing:-.01em}
+.logo-sub{letter-spacing:0}
+.gnb a{font-weight:400;letter-spacing:0;font-size:.9rem}
+.gnb a[aria-current="page"]{font-weight:500}
+.gnb a[aria-current="page"]::after{background:var(--copper);height:2px}
+.header-tel{font-weight:500;letter-spacing:0}
+.header-shop.btn-shop{font-weight:500;border-color:var(--navy-deep);color:var(--navy-deep)}
+.header-shop.btn-shop:hover{background:var(--navy-deep);border-color:var(--navy-deep)}
+
+/* ── 히어로 — 좌 텍스트 / 우 현장 사진(우측 끝까지, 폭 상한 1000px) ── */
+.hero{container-type:inline-size;background:var(--paper);padding:0;border-bottom:1px solid var(--line)}
+.hero__grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,min(54%,980px));
+  align-items:stretch;min-height:clamp(520px,64vh,680px)}
+.hero__text{display:flex;flex-direction:column;justify-content:center;
+  padding:clamp(48px,7vw,96px) clamp(28px,4vw,64px) clamp(48px,7vw,96px)
+    max(var(--gap),calc(50cqw - var(--wrap) / 2 + var(--gap)))}
+.hero__title{margin-top:1.5rem;font-weight:500;font-size:clamp(2rem,3.7vw,3.3rem);
+  line-height:1.28;letter-spacing:-.025em;text-wrap:balance;color:var(--navy-deep)}
+.hero__desc{margin-top:1.8rem;max-width:30em;font-size:clamp(1rem,1.3vw,1.12rem);line-height:1.8;
+  letter-spacing:0;color:var(--ink-2)}
+.hero__actions{margin-top:2.6rem;display:flex;gap:1.6rem 2rem;flex-wrap:wrap;align-items:center}
+.hero__media{position:relative;margin:0;background:var(--concrete)}
+.hero__media img{width:100%;height:100%;aspect-ratio:auto;object-fit:cover}
+.hero__cap{position:absolute;left:0;bottom:0;max-width:min(420px,86%);
+  background:#fff;border-top:3px solid var(--copper);padding:1rem 1.4rem 1.1rem}
+.hero__cap small{display:block;font-size:.72rem;letter-spacing:.04em;color:var(--sub)}
+.hero__cap a{display:block;margin-top:.25rem;font-weight:500;font-size:.95rem;line-height:1.5;color:var(--ink)}
+.hero__cap a::after{content:" →";color:var(--copper)}
+.hero__cap a:hover{opacity:.65}
+/* 사업 분야 색인 — 첫 화면 하단의 3칸 목차 */
+.hero__index{border-top:1px solid var(--line-2);background:var(--bg)}
+.hero__index ul{display:grid;grid-template-columns:repeat(var(--biz-n,3),minmax(0,1fr))}
+.hero__index li+li{border-left:1px solid var(--line)}
+.hero__index a{display:grid;grid-template-columns:auto 1fr;gap:.2rem 1rem;align-items:baseline;
+  padding:1.3rem clamp(14px,2vw,28px) 1.4rem;transition:background .3s}
+.hero__index li:first-child a{padding-left:0}
+.hero__index a:hover{background:var(--paper)}
+.hx__no{grid-row:span 2;font-size:.78rem;font-weight:500;letter-spacing:.08em;color:var(--copper)}
+.hx__name{font-size:1.1rem;font-weight:600;letter-spacing:-.01em;color:var(--navy-deep)}
+.hx__name::after{content:" →";font-weight:300;color:var(--sub)}
+.hx__desc{font-size:.84rem;line-height:1.6;color:var(--sub)}
+
+/* ── 사업 영역 — 큰 사진 + 비대칭 지그재그 (카드 반복 아님) ── */
+.sectors{border-top:1px solid var(--ink)}
+.sector{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);
+  gap:clamp(28px,5vw,88px);align-items:center;
+  padding:clamp(36px,5vw,72px) 0;border-bottom:1px solid var(--line)}
+.sector--flip{grid-template-columns:minmax(0,5fr) minmax(0,7fr)}
+.sector--flip .sector__media{order:2}
+.sector__media{display:block;overflow:hidden;background:var(--concrete)}
+.sector__media img{width:100%;aspect-ratio:16/10;object-fit:cover;transition:transform 1.1s var(--ease)}
+.sector__media:hover img{transform:scale(1.03)}
+.sector--contain .sector__media img{object-fit:contain;padding:clamp(12px,3vw,40px);mix-blend-mode:multiply}
+.sector__no{font-size:.8rem;font-weight:500;letter-spacing:.1em;color:var(--copper)}
+.sector__ttl{margin-top:.7rem;font-weight:500;font-size:clamp(1.7rem,3.2vw,2.5rem);line-height:1.25;
+  letter-spacing:-.025em;color:var(--navy-deep)}
+.sector__desc{margin-top:.9rem;font-size:1.08rem;font-weight:500;line-height:1.6;color:var(--ink)}
+.sector__sum{margin-top:.8rem;max-width:30em;font-size:.95rem;line-height:1.85;color:var(--ink-2)}
+.sector__items{margin-top:1.6rem;border-top:1px solid var(--line)}
+.sector__items li{padding:.62rem 0;border-bottom:1px solid var(--line);font-size:.9rem;color:var(--ink-2)}
+.sector .link-arrow{margin-top:1.8rem}
+
+/* ── 시공사례 — 사진이 주인공 (어두운 면 위에서) ────────────── */
+.proj-sec .section-head p{color:rgba(255,255,255,.7)}
+.proj-sec .link-arrow{color:#fff;border-bottom-color:rgba(255,255,255,.5)}
+.proj-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:clamp(36px,4vw,56px) clamp(20px,2.4vw,36px)}
+.proj{display:block;grid-column:span 6;color:#fff}
+.proj--lead{grid-column:1 / -1;display:grid;grid-template-columns:minmax(0,8fr) minmax(0,4fr);
+  gap:clamp(20px,2.4vw,36px);align-items:end}
+.proj__media{overflow:hidden;background:#1a2a38}
+.proj__media img{width:100%;aspect-ratio:16/9;object-fit:cover;transition:transform 1.1s var(--ease)}
+.proj:hover .proj__media img{transform:scale(1.03)}
+.proj__meta{display:block;margin-top:1rem;font-size:.74rem;letter-spacing:.04em;color:var(--copper-lt)}
+.proj--lead .proj__meta{margin-top:0}
+.proj__ttl{display:block;margin-top:.5rem;font-size:1.12rem;font-weight:500;line-height:1.5;letter-spacing:-.01em;color:#fff}
+.proj--lead .proj__ttl{font-size:clamp(1.3rem,2.2vw,1.7rem);line-height:1.35}
+.proj__sum{display:block;margin-top:.8rem;font-size:.88rem;line-height:1.8;color:rgba(255,255,255,.7)}
+.proj__go{display:inline-block;margin-top:1.1rem;font-size:.82rem;color:#fff;border-bottom:1px solid rgba(255,255,255,.45);padding-bottom:.2rem}
+.proj__go::after{content:" →"}
+
+/* ── 제품 카탈로그 — 표형 목록(사진·품목·용도·상품 수) ──────── */
+.catalog{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,8fr);gap:clamp(32px,6vw,96px);align-items:start}
+.catalog__head{position:sticky;top:calc(var(--header-h) + 28px)}
+.catalog__head h2{margin-top:1.1rem}
+.catalog__head p{margin-top:1.2rem;max-width:26em;font-size:.95rem;line-height:1.85}
+.cat-sub{margin:0 0 .9rem;font-size:.78rem;font-weight:500;letter-spacing:.08em;color:var(--copper)}
+.cat-table{border-top:1px solid var(--ink)}
+.cat-row{display:grid;grid-template-columns:88px minmax(0,1.15fr) minmax(0,1fr) auto;
+  gap:clamp(12px,2vw,28px);align-items:center;padding:.9rem 0;border-bottom:1px solid var(--line);
+  transition:background .3s}
+.cat-row:hover{background:var(--paper)}
+.cat-row__img{display:block;width:88px;height:88px;background:var(--concrete)}
+.cat-row__img img{width:100%;height:100%;object-fit:contain;mix-blend-mode:multiply}
+.cat-row__name{font-size:1.02rem;font-weight:500;line-height:1.45;color:var(--ink)}
+.cat-row__use{font-size:.86rem;line-height:1.6;color:var(--sub)}
+.cat-row__n{font-size:.78rem;color:var(--sub);white-space:nowrap}
+.cat-row__n::after{content:" →";color:var(--ink)}
+.cat-more{margin-top:1.4rem;display:flex;flex-wrap:wrap;gap:.6rem 2rem}
+/* 안전용품 — 사진 없이 문자 색인 (실제 제품 사진 확보 전) */
+.gear{margin-top:clamp(40px,5vw,64px)}
+.gear-table{border-top:1px solid var(--ink)}
+.gear-row{display:grid;grid-template-columns:2.2rem minmax(0,1fr) minmax(0,1.6fr);gap:clamp(10px,2vw,28px);
+  padding:1rem 0;border-bottom:1px solid var(--line);align-items:baseline}
+.gear-row__no{font-size:.78rem;font-weight:500;color:var(--copper)}
+.gear-row__name{font-size:1.02rem;font-weight:500;color:var(--ink)}
+.gear-row__items{font-size:.86rem;line-height:1.7;color:var(--sub)}
+.gear-cta{margin-top:1.6rem;display:flex;flex-wrap:wrap;gap:1rem 2rem;align-items:center}
+
+/* ── 절차 · 상황별 안내 ─────────────────────────────────── */
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:0 clamp(20px,2.4vw,36px);
+  border-top:1px solid var(--ink)}
+.steps li{display:block;padding:1.3rem 0 0;border-bottom:0}
+.steps li::before{display:block;margin-bottom:.9rem;font-family:var(--sans);font-weight:500;color:var(--copper)}
+.steps b{display:block;font-weight:600;font-size:1.02rem;letter-spacing:-.01em}
+.steps span{display:block;margin-top:.5rem;font-size:.88rem;line-height:1.75}
+.problem-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:clamp(32px,5vw,72px);
+  border-top:0;border-bottom:1px solid var(--line)}
+.problem-list li{border-top:1px solid var(--line);border-bottom:0}
+.problem-list a{padding:1.25rem 0;font-size:.98rem}
+
+/* ── 공통 정리: 색·글자·버튼·헤드 ────────────────────────── */
+.eyebrow{font-weight:500;color:var(--copper)}
+.eyebrow::before{content:"";display:inline-block;width:24px;height:1px;background:currentColor;
+  vertical-align:middle;margin-right:.9em}
+.section-head h2,.catalog__head h2{letter-spacing:-.025em}
+.page-head{background:var(--paper);border-bottom:1px solid var(--line)}
+.page-head h1{font-weight:500;letter-spacing:-.025em;color:var(--navy-deep);
+  font-size:clamp(1.9rem,4vw,2.9rem);line-height:1.3}
+.page-head p{max-width:40em;color:var(--ink-2)}
+.btn{font-weight:500;letter-spacing:.03em}
+.btn-safety,.btn-primary{background:var(--navy-deep);border-color:var(--navy-deep)}
+.btn-safety:hover,.btn-primary:hover{background:var(--navy);border-color:var(--navy)}
+.btn-ghost,.link-arrow,.card-more{letter-spacing:.02em;text-transform:none;font-size:.88rem;font-weight:500}
+.btn-ghost,.link-arrow{border-bottom-color:var(--copper)}
+.cta-band,.site-footer{background:var(--navy-deep)}
+.site-footer{background:#0a141d}
+.cta-band .eyebrow{color:var(--copper-lt)}
+.cta-band h2{font-weight:500;letter-spacing:-.02em}
+.cta-band__tel{font-weight:500;letter-spacing:-.01em}
+.section--dark{background:var(--navy-deep)}
+.mobile-cta a:last-child{background:var(--navy-deep)}
+.section--dark .eyebrow{color:var(--copper-lt)}
+.section--dark .proj__ttl{color:#fff}
+/* 키보드 포커스 — 어두운 면에서는 흰색 */
+.cta-band :focus-visible,.site-footer :focus-visible,.section--dark :focus-visible,
+.gnb.is-open :focus-visible{outline-color:#fff}
+:focus-visible{outline:2px solid var(--navy);outline-offset:3px}
+
+/* ── 반응형 ──────────────────────────────────────────────── */
+@media (max-width:1024px){
+  .catalog{grid-template-columns:minmax(0,1fr)}
+  .catalog__head{position:static}
+}
+@media (max-width:900px){
+  .hero__grid{grid-template-columns:minmax(0,1fr);min-height:0}
+  .hero__text{padding:clamp(40px,8vw,64px) var(--gap)}
+  .hero__media img{height:auto;aspect-ratio:16/10}
+  .hero__cap{position:static;max-width:none;border-top-width:2px}
+  .sector,.sector--flip{grid-template-columns:minmax(0,1fr)}
+  .sector--flip .sector__media{order:0}
+  .proj--lead{grid-template-columns:minmax(0,1fr);align-items:start}
+  .proj--lead .proj__meta{margin-top:1rem}
+  .problem-list{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:768px){
+  .hero__index ul{grid-template-columns:minmax(0,1fr)}
+  .hero__index li+li{border-left:0;border-top:1px solid var(--line)}
+  .hero__index a,.hero__index li:first-child a{padding-left:0;padding-right:0}
+  .proj{grid-column:1 / -1}
+  .steps{grid-template-columns:minmax(0,1fr)}
+  .steps li{padding:1.2rem 0;border-bottom:1px solid var(--line)}
+}
+@media (max-width:640px){
+  .cat-row{grid-template-columns:72px minmax(0,1fr) auto}
+  .cat-row__img{width:72px;height:72px}
+  .cat-row__use{display:none}
+  .gear-row{grid-template-columns:2rem minmax(0,1fr)}
+  .gear-row__items{grid-column:2}
+}
+@media (max-width:480px){
+  .hero__title br{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{transition-duration:.01ms !important;animation-duration:.01ms !important}
+  .sector__media:hover img,.proj:hover .proj__media img{transform:none}
+}
+
+/* 서비스 카드의 시설 목록 — 본문과 간격을 두고 행마다 괘선 */
+.facilities{margin-top:1.2rem;border-top:1px solid var(--line)}
+.facilities li{padding:.55rem 0;border-bottom:1px solid var(--line);font-size:.9rem;color:var(--ink-2)}

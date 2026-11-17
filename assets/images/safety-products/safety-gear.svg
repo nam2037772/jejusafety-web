@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 563" width="900" height="563" role="img" aria-label="안전모, 안전조끼, 안전화를 나란히 그린 일러스트">
+  <rect width="900" height="563" fill="#f4f3f0"/>
+  <rect y="470" width="900" height="93" fill="#ebe8e2"/>
+  <line x1="0" y1="470" x2="900" y2="470" stroke="#d4d0c9" stroke-width="2"/>
+  <g transform="translate(-30,0)">
+    <!-- 안전모 -->
+    <ellipse cx="290" cy="474" rx="150" ry="12" fill="#d9d5cd"/>
+    <path d="M150 350 C150 235 215 178 290 178 C365 178 430 235 430 350 Z" fill="#e0a325"/>
+    <path d="M178 330 C182 252 226 206 280 196" fill="none" stroke="#f3cd6b" stroke-width="10" stroke-linecap="round"/>
+    <rect x="268" y="172" width="44" height="178" rx="16" fill="#c98f14"/>
+    <rect x="128" y="344" width="324" height="30" rx="15" fill="#e0a325"/>
+    <rect x="128" y="362" width="324" height="12" rx="6" fill="#c98f14"/>
+    <!-- 안전조끼 -->
+    <ellipse cx="560" cy="474" rx="130" ry="12" fill="#d9d5cd"/>
+    <path d="M490 215 L545 215 L568 252 L591 215 L646 215 L696 275 L664 306 L648 290 L648 460 L488 460 L488 290 L472 306 L440 275 Z" fill="#e8742a"/>
+    <rect x="488" y="346" width="160" height="22" fill="#f1f1ee"/>
+    <rect x="488" y="398" width="160" height="22" fill="#f1f1ee"/>
+    <path d="M568 252 L568 460" stroke="#b9561a" stroke-width="3"/>
+    <!-- 안전화 -->
+    <ellipse cx="800" cy="474" rx="95" ry="11" fill="#d9d5cd"/>
+    <path d="M735 330 L792 330 L792 404 C842 408 874 428 878 452 L878 462 L735 462 Z" fill="#3b3a37"/>
+    <path d="M735 330 L792 330 L792 352 L735 352 Z" fill="#55534e"/>
+    <path d="M840 424 C860 432 872 444 876 452 L836 452 Z" fill="#55534e"/>
+    <rect x="729" y="456" width="154" height="16" rx="6" fill="#1f1e1c"/>
+  </g>
+</svg>
