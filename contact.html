@@ -280,6 +280,7 @@
         <p><label for="f-org">기관/업체명</label><input class="search-box" id="f-org" name="org" type="text" autocomplete="organization"></p>
         <p><label for="f-name">담당자 <span class="req">(필수)</span></label><input class="search-box" id="f-name" name="name" type="text" autocomplete="name" required aria-required="true"></p>
         <p><label for="f-phone">연락처 <span class="req">(필수)</span></label><input class="search-box" id="f-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" required aria-required="true" placeholder="휴대폰 또는 사무실 번호"></p>
+        <p><label for="f-email">이메일 <span class="req">(필수)</span></label><input class="search-box" id="f-email" name="email" type="email" autocomplete="email" inputmode="email" required aria-required="true" placeholder="견적서를 받을 이메일 주소"></p>
         <p><label for="f-place">현장 위치 (제주도 내)</label><input class="search-box" id="f-place" name="place" type="text" placeholder="예: 제주시 ○○동 / 서귀포시 ○○읍"></p>
         <p><label for="f-facility">시설 / 자재</label><input class="search-box" id="f-facility" name="facility" type="text" placeholder="예: 시선유도봉 / 투수블록"></p>
         <p><label for="f-qty">수량</label><input class="search-box" id="f-qty" name="qty" type="text" placeholder="예: 12개소 / 300m² / 2파렛트"></p>
@@ -294,8 +295,8 @@
       <div class="consent">
         <p class="consent__ttl">개인정보 수집·이용 안내</p>
         <ul>
-          <li>수집 항목: 담당자, 연락처 (필수) · 기관/업체명, 현장 위치, 시설/자재, 수량, 내용 (선택)</li>
-          <li>이용 목적: 견적·상담 회신과 현장 확인</li>
+          <li>수집 항목: 담당자, 연락처, 이메일 (필수) · 기관/업체명, 현장 위치, 시설/자재, 수량, 내용 (선택)</li>
+          <li>이용 목적: 견적서 발송과 상담 회신(이메일), 연락(연락처), 현장 확인</li>
           <li>보유 기간: 상담 종료 후 파기 (계약 시 관계 법령에 따른 기간 보관)</li>
           <li>전송 처리: 문의 접수 서비스(Formspree)를 거쳐 ainsafe@naver.com 으로 전달됩니다</li>
           <li>국외 이전: Formspree, Inc. (미국) — 위 항목을 문의 전달 목적으로 전송 시점에 이전하며, 서비스 보관 기간(무료 요금제 30일) 후 삭제됩니다</li>
@@ -309,7 +310,7 @@
         <a class="btn btn-ghost" href="tel:16604019">전화가 편하시면 1660-4019</a>
       </div>
       <p class="card-tags" style="margin-top:10px">
-        작성 중인 내용은 이 기기에만 임시 저장되며, 전송이 완료되면 지워집니다.
+        작성 중인 내용(이메일 포함)은 이 기기에만 임시 저장되며, 전송이 완료되거나 24시간이 지나면 지워집니다.
       </p>
     </form>
 

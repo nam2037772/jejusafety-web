@@ -244,6 +244,7 @@
         '기관/업체명: ' + get('org'),
         '담당자: ' + get('name'),
         '연락처: ' + get('phone'),
+        '이메일: ' + get('email'),
         '현장 위치(제주도 내): ' + get('place'),
         '시설/자재: ' + get('facility'),
         '수량: ' + get('qty'),
@@ -272,6 +273,7 @@
       '접수번호': inq.ref,
       '문의 유형': (INQUIRY_TYPES[inq.type] || INQUIRY_TYPES.quote).label,
       '기관/업체명': get('org'), '담당자': get('name'), '연락처': get('phone'),
+      email: get('email'),
       '현장 위치': get('place'), '시설/자재': get('facility'), '수량': get('qty'), '내용': get('message'),
       botcheck: get('botcheck')
     };
@@ -293,19 +295,22 @@
 
   /* ── 견적문의 폼 ─────────────────────────────────────────── */
   var DRAFT_KEY = 'jejusafety-inquiry-draft';
-  var DRAFT_FIELDS = ['type', 'org', 'name', 'phone', 'place', 'facility', 'qty', 'message'];
+  var DRAFT_FIELDS = ['type', 'org', 'name', 'phone', 'email', 'place', 'facility', 'qty', 'message'];
+  var DRAFT_TTL_MS = 24 * 60 * 60 * 1000;   // 임시저장은 24시간 뒤 자동 폐기 (연락처·이메일이 기기에 오래 남지 않게)
   function saveDraft(form) {
     try {
       var d = {};
       DRAFT_FIELDS.forEach(function (n) { if (form.elements[n]) d[n] = form.elements[n].value; });
-      localStorage.setItem(DRAFT_KEY, JSON.stringify(d));
+      localStorage.setItem(DRAFT_KEY, JSON.stringify({ t: Date.now(), f: d }));
     } catch (e) { /* 저장할 수 없는 환경 — 무시 */ }
   }
   function loadDraft(form) {
     try {
-      var d = JSON.parse(localStorage.getItem(DRAFT_KEY) || 'null');
-      if (!d) return;
-      DRAFT_FIELDS.forEach(function (n) { if (form.elements[n] && d[n]) form.elements[n].value = d[n]; });
+      var raw = JSON.parse(localStorage.getItem(DRAFT_KEY) || 'null');
+      if (!raw) return;
+      /* 시각이 없는 예전 형식이거나 24시간이 지난 임시저장은 불러오지 않고 지웁니다 */
+      if (!raw.t || !raw.f || Date.now() - raw.t > DRAFT_TTL_MS) { clearDraft(); return; }
+      DRAFT_FIELDS.forEach(function (n) { if (form.elements[n] && raw.f[n]) form.elements[n].value = raw.f[n]; });
     } catch (e) { /* 무시 */ }
   }
   function clearDraft() { try { localStorage.removeItem(DRAFT_KEY); } catch (e) { /* 무시 */ } }
@@ -320,6 +325,9 @@
     });
   }
 
+  /* 이메일 형식 — 공백 없는 local@domain.tld (tld 2자 이상). 최종 판단은 수신 서비스가 합니다. */
+  function isEmail(v) { return v.length <= 254 && /^[^\s@]+@[^\s@]+\.[^\s@.]{2,}$/.test(v); }
+
   function validate(form) {
     var get = function (n) { var f = form.elements[n]; return f ? f.value.trim() : ''; };
     var errs = [];
@@ -327,6 +335,9 @@
     var phone = get('phone').replace(/[^\d]/g, '');
     if (!phone) errs.push(['phone', '연락처를 입력해 주세요.']);
     else if (phone.length < 9 || phone.length > 12) errs.push(['phone', '연락처를 확인해 주세요.']);
+    var email = get('email');
+    if (!email) errs.push(['email', '견적서를 받을 이메일 주소를 입력해 주세요.']);
+    else if (!isEmail(email)) errs.push(['email', '이메일 형식을 확인해 주세요. (예: name@company.com)']);
     if (!get('facility') && !get('message')) errs.push(['message', '시설/자재 또는 내용 중 하나를 입력해 주세요.']);
     if (form.elements.consent && !form.elements.consent.checked) errs.push(['consent', '개인정보 수집·이용에 동의해 주세요.']);
     Array.prototype.forEach.call(form.querySelectorAll('[aria-invalid]'), function (el) { el.removeAttribute('aria-invalid'); });
